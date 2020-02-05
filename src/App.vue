@@ -1,6 +1,5 @@
 <template>
-  <v-app>
-    yolo
+  <v-app class="page__view">
     <router-view></router-view>
   </v-app>
 </template>
@@ -12,3 +11,9 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.page__view{
+  min-width: 100vw;
+  min-height: 100vh;
+}
+</style>

@@ -10,8 +10,6 @@ import App from './App.vue'
 
 Vue.config.productionTip = false;
 
-console.log(router)
-
 new Vue({
   router,
   store,
