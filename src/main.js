@@ -1,8 +1,20 @@
-import Vue from 'vue'
+/* eslint-disable no-console */
+import Vue from "vue";
+import vuetify from "./plugins/vuetify";
+
+import router from "./router/router";
+import store from "./store/store";
 import App from './App.vue'
 
-Vue.config.productionTip = false
+
+
+Vue.config.productionTip = false;
+
+console.log(router)
 
 new Vue({
-  render: h => h(App),
-}).$mount('#app')
+  router,
+  store,
+  vuetify,
+  render: h => h(App)
+}).$mount("#app");
