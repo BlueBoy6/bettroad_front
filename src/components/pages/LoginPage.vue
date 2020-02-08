@@ -2,7 +2,7 @@
   <v-container class="modal__container">
     <v-row align="center" justify="center" class="modal__connect__row">
       <v-col cols="6" class="blue-grey darken-4 pa-10 modal__connect" >
-        <v-text-field label="Ton pseudo" outlined> </v-text-field>
+        <v-text-field color="lime lighten-1" label="Ton pseudo" outlined> </v-text-field>
         <v-text-field
           :type="showMdp ? 'text' : 'password'"
           label="Ton mot de passe"
@@ -14,7 +14,8 @@
         <v-row justify="end">
           <v-col cols="auto">
             <v-btn class="blue-grey lighten-1" large float-right>
-              Go parier !
+              Go parier ta maman
+              !
             </v-btn>
           </v-col>
         </v-row>
