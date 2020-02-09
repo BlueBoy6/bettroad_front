@@ -1,13 +1,13 @@
-import Vue from 'vue'
-import VueRouter from "vue-router";
-// import Home from '../components/pages/Home'
-import LoginPage from '../components/pages/LoginPage'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import Home from '../components/pages/Home';
+import LoginPage from '../components/pages/LoginPage';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 export default new VueRouter({
-  routes: [
-    { path: "/", component: LoginPage },
-    { path: "/login", component: LoginPage },
-  ]
+	routes: [
+		{ path: '/', component: LoginPage },
+		{ path: '/dashboard', component: Home }
+	]
 });

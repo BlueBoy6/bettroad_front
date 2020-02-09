@@ -1,4 +1,12 @@
-export const colorText = "indigo lighten-5"
-export const colorTitle = "indigo accent-1"
-export const colorInputs = "indigo accent-2"
-export const colorBackground = "blue-grey darken-4"
+export const colorText = 'indigo lighten-5';
+export const colorTitle = 'indigo accent-1';
+// export const colorInputs = "indigo accent-2"
+export const colorInputs = 'light-blue lighten-4';
+export const colorBtn = 'indigo darken-2';
+export const colorBackgroundDark = 'blue-grey darken-4';
+export const colorBackgroundLight = 'indigo lighten-5';
+export const whiteText = 'white--text';
+export const darkText = 'indigo--text text--darken-4';
+
+export const spaceInsideHigh = 'pa-10';
+export const spaceInside = 'pa-5';
