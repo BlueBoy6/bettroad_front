@@ -5,7 +5,7 @@ import { dateFormater } from '../helpers/calendar';
 
 export const storeGameDays = (state, payload) => {
 	momentfr;
-	console.log('payload : ', payload);
+	// console.log('payload : ', payload);
 	const betscategories = payload[0];
 	const findbetcategorielabel = id => {
 		const catFinded = betscategories.find(cat => cat.id === id);
@@ -50,7 +50,5 @@ export const storeGameDays = (state, payload) => {
 		futuregames: futureGames.splice(1, futureGames.length),
 		pastgames: pastGames
 	};
-	// eslint-disable-next-line no-console
-	console.log('storegames : ', storeGames);
 	return (state.gamedays = storeGames);
 };

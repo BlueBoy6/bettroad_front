@@ -66,14 +66,24 @@ export const getAllDatas = async token => {
 	return [games, betsTypes, players];
 };
 
-// await axios({
-// 	method: 'post',
-// 	url: `http://localhost/gamedays`,
-// 	headers: {
-// 		Authorization: `Bearer ${token}`
-// 	},
-// 	data: {
-// 		day: new Date(),
-// 		betstypes: [{ id: 2 }, { id: 4 }]
-// 	}
-// });
+export const postBet = (token, datas) => {
+	datas.map(bet => {
+		axios({
+			method: 'post',
+			url: `${backurl}/bets`,
+			headers: {
+				Authorization: `Bearer ${token}`
+			},
+			data: {
+				...bet
+			}
+		})
+			.then(() => {})
+			.catch(err => {
+				console.log('=================');
+				console.log(err);
+				return err;
+			});
+	});
+	return { status: 'OK' };
+};

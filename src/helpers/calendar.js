@@ -23,4 +23,8 @@ export const getGameDays = token => {
 		});
 };
 
-export const dateFormater = date => moment(date).format('LL');
+export const dateFormater = date => {
+	const endate = moment(date).format('YYYY-MM-DD');
+	const frdate = moment(date).format('LL');
+	return { en: endate, fr: frdate };
+};

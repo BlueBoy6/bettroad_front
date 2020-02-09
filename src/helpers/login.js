@@ -19,6 +19,9 @@ export const loginConnect = (login, password) => {
 				}
 			};
 			if (result.statusText === 'OK') {
+				localStorage.userToken = token.user.token;
+				localStorage.userId = token.user.id;
+				localStorage.userName = token.user.name;
 				return token;
 			}
 		})
