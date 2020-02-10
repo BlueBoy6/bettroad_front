@@ -38,8 +38,8 @@ export default {
 		return {
 			colorInputs,
 			colorBtn,
-			login: 'playertest',
-			password: 'playertest',
+			login: '',
+			password: '',
 			showMdp: false
 		};
 	},
