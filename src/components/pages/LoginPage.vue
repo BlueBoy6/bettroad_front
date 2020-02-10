@@ -1,7 +1,7 @@
 <template>
 	<v-container class="modal__container">
 		<v-row align="center" justify="center" class="modal__connect__row">
-			<v-col cols="6" class="grey darken-4 pa-10 modal__connect">
+			<v-col cols="10" sm="6" md="8" class="grey darken-4 pa-sm-3 pa-md-10 modal__connect">
 				<v-text-field
 					@input="val => (login = val)"
 					:color="colorInputs"
@@ -18,8 +18,8 @@
 					outlined
 				></v-text-field>
 				<v-row justify="end">
-					<v-col cols="auto">
-						<v-btn :class="colorBtn" @click="connect" large float-right
+					<v-col cols="auto" class="py-0">
+						<v-btn class="" :class="colorBtn" @click="connect" large float-right
 							>Go parier !</v-btn
 						>
 					</v-col>
