@@ -1,100 +1,70 @@
 <template>
-  <v-container v-if="dataLoaded" class="dashboard">
-    <v-row>
-      <v-col cols="8" offset="2">
-        <NextGame :game="gamedays.next" />
-      </v-col>
-    </v-row>
-  </v-container>
-  <v-container v-else>
-    <v-row>
-      <v-col cols="8" offset="2" class="loading">
-        <v-progress-circular :size="130" :width="7" :color="colorBackgroundLight" indeterminate />
-      </v-col>
-    </v-row>
-  </v-container>
+	<v-container class="modal__container">
+		<v-row align="center" justify="center" class="modal__connect__row">
+			<v-col cols="10" sm="6" md="8" class="grey darken-4 pa-sm-3 pa-md-10 modal__connect">
+				<v-text-field
+					@input="val => (login = val)"
+					:color="colorInputs"
+					label="Ton pseudo"
+					outlined
+				></v-text-field>
+				<v-text-field
+					:type="showMdp ? 'text' : 'password'"
+					@input="val => (password = val)"
+					label="Ton mot de passe"
+					:color="colorInputs"
+					:append-icon="showMdp ? 'mdi-eye' : 'mdi-eye-off'"
+					@click:append="showMdp = !showMdp"
+					outlined
+				></v-text-field>
+				<v-row justify="end">
+					<v-col cols="auto" class="py-0">
+						<v-btn class="" :class="colorBtn" @click="connect" large float-right
+							>Go parier !</v-btn
+						>
+					</v-col>
+				</v-row>
+			</v-col>
+		</v-row>
+	</v-container>
 </template>
 
 <script>
 /* eslint-disable no-console */
-import { getGameDays } from "../../helpers/calendar";
-import { getBetsTypeCategories, getPlayersTeam } from "../../helpers/betsdata";
-import {
-  colorBackgroundLight,
-  colorBackgroundDark,
-  whiteText,
-  darkText,
-  spaceInside
-} from "../../sass/colors.vars";
-import NextGame from "../organisms/NextGame";
+import { colorInputs, colorBtn } from '../../sass/colors.vars';
+import { loginConnect } from '../../helpers/login';
 export default {
-  components: {
-    NextGame
-  },
-  data() {
-    return {
-      dataLoaded: false,
-      gamedays: null,
-      colorBackgroundLight,
-      colorBackgroundDark,
-      whiteText,
-      darkText,
-      spaceInside
-    };
-  },
-  mounted: async function() {
-    const token = this.$store.state.user.token;
-    // console.log("store token to boot : ", !!token);
-    if (token === undefined) {
-      this.$router.push({
-        path: "/"
-      });
-    }
-    this.fetchGameDatas(token);
-  },
-  methods: {
-    fetchGameDatas: async function(token) {
-      const gamedaysdata = await getGameDays(token);
-      const betsCategoriesData = await getBetsTypeCategories(token);
-      const players = await getPlayersTeam(token);
-      if (gamedaysdata) {
-        this.$store.commit("storeBetsCategories", betsCategoriesData);
-        this.$store.commit("storeTeamMates", players);
-        this.$store.commit("storeGameDays", [betsCategoriesData, gamedaysdata]);
-        if (this.$store.state.gamedays.next !== null) {
-          this.gamedays = this.$store.state.gamedays;
-          this.dataLoaded = true;
-        }
-      }
-    }
-  }
+	data() {
+		return {
+			colorInputs,
+			colorBtn,
+			login: '',
+			password: '',
+			showMdp: false
+		};
+	},
+	methods: {
+		connect: async function() {
+			const connection = await loginConnect(this.login, this.password);
+			if (connection.status === 'OK') {
+				this.$store.commit('login', connection.user);
+				this.$router.push({
+					path: '/dashboard'
+				});
+			}
+		}
+	}
 };
 </script>
 
 <style lang="scss">
-// $card-adjacent-sibling-text-padding-top: 45px;
-.container.dashboard {
-  min-height: 100%;
-  & > .row {
-    min-height: 100%;
-    .col.loading {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
-}
-.v-card {
-  .event__card {
-    border-radius: 6px;
-    text-align: left;
-    p.headline {
-      margin-bottom: 0px;
-    }
-    .bets__available {
-      width: 100%;
-      border-radius: 4px;
-    }
-  }
+.modal__container {
+	min-height: 100%;
+	.modal__connect__row {
+		height: 100%;
+		.modal__connect {
+			border-radius: 4px;
+		}
+	}
 }
 </style>
