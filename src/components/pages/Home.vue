@@ -2,7 +2,7 @@
   <v-container v-if="dataLoaded" class="dashboard">
     <v-row>
       <v-col cols="12" md="8" offset="0">
-        <NextGame :game="gamedays.next" />
+        <NextGame :game="gamedays.nextGame" />
       </v-col>
     </v-row>
   </v-container>
