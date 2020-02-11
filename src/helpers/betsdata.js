@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 import axios from 'axios';
-import { getGameDays } from '../helpers/calendar';
 import { back } from './constants';
 
 const backurl = back.url;
@@ -59,31 +58,51 @@ export const getPlayersTeam = token => {
 		});
 };
 
-export const getAllDatas = async token => {
-	const games = await getGameDays(token);
-	const betsTypes = await getBetsTypeCategories(token);
-	const players = await getPlayersTeam(token);
-	return [games, betsTypes, players];
+export const getBets = async (token, idBetter) => {
+	try {
+		const getBets = await axios({
+			method: 'get',
+			url: `${backurl}/bets?user=${idBetter}`,
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
+		});
+		if (getBets.statusText === 'OK') {
+			return getBets.data;
+		}
+	} catch (err) {
+		console.log('error  :', err);
+	}
 };
 
-export const postBet = (token, datas) => {
-	datas.map(bet => {
-		axios({
+export const postBet = async (token, datas) => {
+	try {
+		const firstcall = await axios({
 			method: 'post',
 			url: `${backurl}/bets`,
 			headers: {
 				Authorization: `Bearer ${token}`
 			},
 			data: {
-				...bet
+				...datas[0]
 			}
-		})
-			.then(() => {})
-			.catch(err => {
-				console.log('=================');
-				console.log(err);
-				return err;
-			});
-	});
-	return { status: 'OK' };
+		});
+		const secondcall = await axios({
+			method: 'post',
+			url: `${backurl}/bets`,
+			headers: {
+				Authorization: `Bearer ${token}`
+			},
+			data: {
+				...datas[1]
+			}
+		});
+		if (firstcall && secondcall) {
+			console.log('firstcall', firstcall);
+			console.log('secondcall', secondcall);
+			return { status: 'OK', data: [firstcall, secondcall] };
+		}
+	} catch (err) {
+		console.log('error  :', err);
+	}
 };
