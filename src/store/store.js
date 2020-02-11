@@ -2,20 +2,26 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import { storeGameDays } from './gamedays';
+import { storeBets } from './storeBets';
 import { postBet } from '../helpers/betsdata';
 Vue.use(Vuex);
 export default new Vuex.Store({
 	state: {
 		user: {
-			id: 2,
-			token: localStorage.userToken
+			id: localStorage.userId ? localStorage.userId : null,
+			name: localStorage.userName || null,
+			role: null,
+			token: localStorage.userToken || null
 		},
 		gamedays: {
-			next: null,
+			nextGame: null,
 			futureGames: null,
 			pastGames: null
 		},
-		betNextGameStatus: null,
+		bets: {
+			nextGame: null,
+			pastGames: null
+		},
 		betsCategorie: null,
 		teamMates: null
 	},
@@ -23,10 +29,13 @@ export default new Vuex.Store({
 		login(state, payload) {
 			state.user = payload;
 		},
-		betnextgamestatus(state, payload) {
-			console.log('state', state);
-			console.log('comit', payload);
-			state.betNextGameStatus = payload;
+		logout(state) {
+			state.user = {
+				id: null,
+				name: null,
+				role: null,
+				token: null
+			};
 		},
 		storeBetsCategories(state, payload) {
 			state.betsCategorie = payload;
@@ -34,12 +43,9 @@ export default new Vuex.Store({
 		storeTeamMates(state, payload) {
 			state.teamMates = payload;
 		},
-		postBetPlayer(state, payload) {
+		postBetPlayer: async function(state, payload) {
 			const dataBets = payload.bets;
-			// const dataGameId = payload.gamedayId;
-			const gamedayDate = payload.gameday.date;
-			// console.log('postBetPlayer : ', dataGameId);
-			console.log('datas value : ', payload);
+			const gamedayDate = payload.gameday.id;
 			const dataToSubmit = dataBets.map(bet => {
 				return {
 					user: state.user.id,
@@ -48,15 +54,29 @@ export default new Vuex.Store({
 					betstype: bet.idBet
 				};
 			});
-			console.log('dataToSubmit : ', dataToSubmit);
-
-			const postAction = postBet(state.user.token, dataToSubmit);
+			const postAction = await postBet(state.user.token, dataToSubmit);
 			if (postAction.status === 'OK') {
-				localStorage.setItem(`betnextgame${state.gamedays.next.id}`, 'OK');
-				return (state.betNextGameStatus = 'OK');
+				console.log(postAction);
+				const nextGameId = state.gamedays.nextGame.id;
+				const betOfNextGame = postAction.data.filter(
+					bet => bet.data.gameday.id === nextGameId
+				);
+				console.log('betOfNextGame', betOfNextGame);
+				const nextGameBetSubmited = betOfNextGame.map(bet => {
+					return {
+						betType: bet.data.betstype.name,
+						betSubmited: bet.data.betSubmited
+					};
+				});
+				if (nextGameBetSubmited.length === 0) {
+					return (state.bets.nextGame = null);
+				}
+				console.log('nextGameBetSubmited', nextGameBetSubmited);
+				return (state.bets.nextGame = nextGameBetSubmited);
 			}
 		},
-		storeGameDays
+		storeGameDays,
+		storeBets
 	},
 	actions: {
 		postBet(context, commit) {

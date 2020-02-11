@@ -5,30 +5,36 @@
     <v-card class="display-1 event__card" :class="[spaceInside, colorBackgroundLight, darkText]">
       <p class="subtitle-1 mb-0">
         <!-- <v-icon :color="colorBackgroundDark">mdi-map-marker-radius</v-icon> -->
-        <span class="ml-2">{{ game.city }}</span>
+        <span>{{ game.city }}</span>
       </p>
       <p class="headline font-weight-bold">{{ game.day.fr }}</p>
-      <v-row>
+      <v-row v-if="nextGameSubmited">
+        <v-col class="py-0">
+          <p class="title">T'as parié sur</p>
+          <div v-bind:key="i" v-for="(betted, i) in betSubmited" class="bets__submited mt-2">
+            <p class="pa-2 ma-0 body-2" :class="[colorBtn, whiteText]">{{betted.betType}}</p>
+            <p class="pa-2 ma-0 body-2">{{betted.betSubmited}}</p>
+          </div>
+        </v-col>
+      </v-row>
+      <v-row justify="end" v-else>
         <v-col>
           <v-card
             v-bind:key="bet.name"
             v-for="bet in game.betstypes"
-            class="ma-1 pa-3 subtitle-1 bets__available"
-            :class="[cardBetsState, whiteText]"
+            class="mt-1 pa-3 subtitle-1 bets__available"
+            :class="whiteText"
             elevation="5"
             width="100%"
           >{{ bet.name }}</v-card>
-        </v-col>
-      </v-row>
-      <v-row justify="end">
-        <v-col cols="auto">
           <v-btn
-            v-if="this.$store.state.betNextGameStatus !== 'OK'"
+            class="mt-10"
             :class="colorBtn"
             @click="nextGameOverlay = true"
             large
+            width="100%"
             float-right
-          >Paris-là !</v-btn>
+          >Oh {{this.$store.state.user.name}}, Paris-là !</v-btn>
         </v-col>
       </v-row>
     </v-card>
@@ -81,7 +87,6 @@ import {
   spaceInside
 } from "../../sass/colors.vars";
 import BetSwitch from "../atoms/betsSwitch";
-// import { postBet } from "../../helpers/betsdata";
 export default {
   components: {
     BetSwitch
@@ -109,6 +114,7 @@ export default {
           }
         ]
       },
+      betSubmited: this.$store.state.bets.nextGame,
       nextGameOverlay: false,
       colorBackgroundLight,
       colorBackgroundDark,
@@ -118,11 +124,6 @@ export default {
       colorBtn,
       colorSuccess
     };
-  },
-  beforeMount() {
-    if (localStorage.getItem(`betnextgame${this.game.id}`) === "OK") {
-      this.$store.commit("betnextgamestatus", "OK");
-    }
   },
   methods: {
     changeValueBet: function(e) {
@@ -134,19 +135,31 @@ export default {
       const betToSubmit = this.bet;
       this.$store.commit("postBetPlayer", betToSubmit);
       this.nextGameOverlay = false;
+      this.$router.push({
+        path: "/dashboard"
+      });
     }
   },
   computed: {
-    cardBetsState: function() {
-      console.log("status : ", this.$store.state.betNextGameStatus);
-      if (this.$store.state.betNextGameStatus === "OK") {
-        return colorSuccess;
+    nextGameSubmited: function() {
+      if (this.$store.state.bets.nextGame !== null) {
+        return true;
       }
-      return colorBackgroundDark;
+      return false;
     }
   }
 };
 </script>
 
-<style>
+<style lang="scss">
+.bets__submited {
+  p:first-child {
+    border-radius: 4px 4px 0 0;
+  }
+  p:last-child {
+    border: 2px solid #303f9f;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+  }
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
   <v-container v-if="dataLoaded" class="dashboard">
     <v-row>
-      <v-col cols="12" md="8" offset="0" >
+      <v-col cols="12" md="8" offset="0">
         <NextGame :game="gamedays.next" />
       </v-col>
     </v-row>
@@ -18,7 +18,11 @@
 <script>
 /* eslint-disable no-console */
 import { getGameDays } from "../../helpers/calendar";
-import { getBetsTypeCategories, getPlayersTeam } from "../../helpers/betsdata";
+import {
+  getBetsTypeCategories,
+  getPlayersTeam,
+  getBets
+} from "../../helpers/betsdata";
 import {
   colorBackgroundLight,
   colorBackgroundDark,
@@ -44,24 +48,25 @@ export default {
   },
   mounted: async function() {
     const token = this.$store.state.user.token;
-    // console.log("store token to boot : ", !!token);
-    if (token === undefined) {
+    if (token === null) {
       this.$router.push({
         path: "/"
       });
     }
-    this.fetchGameDatas(token);
+    this.fetchGameData(token);
   },
   methods: {
-    fetchGameDatas: async function(token) {
+    fetchGameData: async function(token) {
       const gamedaysdata = await getGameDays(token);
       const betsCategoriesData = await getBetsTypeCategories(token);
       const players = await getPlayersTeam(token);
-      if (gamedaysdata) {
+      const bets = await getBets(token, this.$store.state.user.id);
+      if (bets) {
         this.$store.commit("storeBetsCategories", betsCategoriesData);
         this.$store.commit("storeTeamMates", players);
         this.$store.commit("storeGameDays", [betsCategoriesData, gamedaysdata]);
-        if (this.$store.state.gamedays.next !== null) {
+        this.$store.commit("storeBets", bets);
+        if (this.$store.state.gamedays.nextGame !== null) {
           this.gamedays = this.$store.state.gamedays;
           this.dataLoaded = true;
         }
