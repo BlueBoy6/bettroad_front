@@ -1,0 +1,27 @@
+// ==================================================
+// FUNCTIONNAL MIXINS
+// ==================================================
+$breakpoints: (
+	'phone': 250px,
+	'phonemax': 767px,
+	'tablet': 768px,
+	'tabletmax': 1023px,
+	'laptop': 1024px,
+	'laptopmax': 1279px,
+	'desktop': 1280px
+);
+@mixin media-min($_key) {
+	@media screen and (min-width: map-get($breakpoints, $_key)) {
+		@content;
+	}
+}
+@mixin media-max($_key) {
+	@media screen and (max-width: map-get($breakpoints, $_key)) {
+		@content;
+	}
+}
+@mixin media-min-max($key1, $key2) {
+	@media screen and (min-width: map-get($breakpoints, $key1)) and (max-width: map-get($breakpoints, $key2)) {
+		@content;
+	}
+}

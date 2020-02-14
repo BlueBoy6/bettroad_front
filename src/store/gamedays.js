@@ -50,6 +50,6 @@ export const storeGameDays = (state, payload) => {
 		futuregames: futureGames.splice(1, futureGames.length),
 		pastgames: pastGames
 	};
-	console.log('storeGames', storeGames);
+
 	return (state.gamedays = storeGames);
 };

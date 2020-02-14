@@ -48,8 +48,6 @@ export default {
       this.openMenu = true;
     },
     disconnect: function() {
-      // eslint-disable-next-line no-console
-      console.log("this.$store : ", this.$store);
       this.openMenu = false;
       this.$store.commit("logout");
       localStorage.clear();

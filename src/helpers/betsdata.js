@@ -12,7 +12,6 @@ export const getBetsType = token => {
 			}
 		})
 		.then(result => {
-			console.log('success', result);
 			const betsTypes = result.data;
 			return betsTypes;
 		})
@@ -74,33 +73,28 @@ export const getBets = async (token, idBetter) => {
 		console.log('error  :', err);
 	}
 };
-
 export const postBet = async (token, datas) => {
 	try {
-		const firstcall = await axios({
-			method: 'post',
-			url: `${backurl}/bets`,
-			headers: {
-				Authorization: `Bearer ${token}`
-			},
-			data: {
-				...datas[0]
+		let responses = [];
+		for (let i = 0; i < datas.length; ) {
+			const axcall = await axios({
+				method: 'post',
+				url: `${backurl}/bets`,
+				headers: {
+					Authorization: `Bearer ${token}`
+				},
+				data: {
+					...datas[i]
+				}
+			});
+			if (axcall.statusText === 'OK') {
+				responses.push(axcall);
+				i++;
 			}
-		});
-		const secondcall = await axios({
-			method: 'post',
-			url: `${backurl}/bets`,
-			headers: {
-				Authorization: `Bearer ${token}`
-			},
-			data: {
-				...datas[1]
-			}
-		});
-		if (firstcall && secondcall) {
-			console.log('firstcall', firstcall);
-			console.log('secondcall', secondcall);
-			return { status: 'OK', data: [firstcall, secondcall] };
+		}
+		if (responses.length === datas.length) {
+			console.log('happy call !');
+			return { status: 'OK', data: responses };
 		}
 	} catch (err) {
 		console.log('error  :', err);

@@ -53,6 +53,13 @@ export default {
 				});
 			}
 		}
+	},
+	mounted(){
+		if(localStorage.userId !== undefined && localStorage.userToken !== undefined){
+			this.$router.push({
+				path: '/dashboard'
+			});
+		}
 	}
 };
 </script>

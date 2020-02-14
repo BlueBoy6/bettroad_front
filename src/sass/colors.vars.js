@@ -10,5 +10,7 @@ export const colorSuccess = 'teal darken-1';
 export const whiteText = 'white--text';
 export const darkText = 'blue-grey--text text--darken-4';
 
+export const colorErrorModal = 'red darken-3 white--text';
+
 export const spaceInsideHigh = 'pa-10 pa-sm-5';
 export const spaceInside = 'pa-2 pa-sm-5';
