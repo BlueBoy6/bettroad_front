@@ -4,6 +4,9 @@ import Vuex from 'vuex';
 import { storeGameDays } from './gamedays';
 import { storeBets } from './storeBets';
 import { postBets } from './postBetAction';
+import { getGamedays } from './getGamedays';
+import { getTeammates } from './getTeammates';
+import { getTeams } from './getTeams';
 Vue.use(Vuex);
 export default new Vuex.Store({
 	state: {
@@ -37,11 +40,14 @@ export default new Vuex.Store({
 				token: null
 			};
 		},
-		storeBetsCategories(state, payload) {
-			state.betsCategorie = payload;
+		storeGamedays(state, payload) {
+			state.gamedays = payload;
 		},
-		storeTeamMates(state, payload) {
+		storeTeammates(state, payload) {
 			state.teamMates = payload;
+		},
+		storeTeamschampionship(state, payload) {
+			state.teamsChampionship = payload;
 		},
 		postBetCommit(state, payload) {
 			state.bets.nextGame = payload;
@@ -50,6 +56,9 @@ export default new Vuex.Store({
 		storeBets
 	},
 	actions: {
-		postBets
+		postBets,
+		getGamedays,
+		getTeammates,
+		getTeams
 	}
 });

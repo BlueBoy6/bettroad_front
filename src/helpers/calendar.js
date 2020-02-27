@@ -5,7 +5,7 @@ import { back } from './constants';
 
 const backurl = back.url;
 
-export const getGameDays = token => {
+export const getGamedays = token => {
 	return axios
 		.get(`${backurl}/gamedays`, {
 			headers: {

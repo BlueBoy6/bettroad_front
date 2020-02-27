@@ -22,12 +22,6 @@
 
 <script>
 /* eslint-disable no-console */
-import { getGameDays } from '../../helpers/calendar';
-import {
-	getBetsTypeCategories,
-	getPlayersTeam,
-	getBets
-} from '../../helpers/betsdata';
 import {
 	colorBackgroundLight,
 	colorBackgroundDark,
@@ -58,27 +52,32 @@ export default {
 				path: '/'
 			});
 		}
-		this.fetchGameData(token);
+		this.fetchGameData();
 	},
 	methods: {
-		fetchGameData: async function(token) {
-			const gamedaysdata = await getGameDays(token);
-			const betsCategoriesData = await getBetsTypeCategories(token);
-			const players = await getPlayersTeam(token);
-			const bets = await getBets(token, this.$store.state.user.id);
-			if (bets) {
-				this.$store.commit('storeBetsCategories', betsCategoriesData);
-				this.$store.commit('storeTeamMates', players);
-				this.$store.commit('storeGameDays', [
-					betsCategoriesData,
-					gamedaysdata
-				]);
-				this.$store.commit('storeBets', bets);
-				if (this.$store.state.gamedays.nextGame !== null) {
-					this.gamedays = this.$store.state.gamedays;
-					this.dataLoaded = true;
-				}
-			}
+		fetchGameData: async function() {
+			// const gamedays = await getGameDays(token);
+			this.$store.dispatch('getGamedays').then(() =>{
+				this.gamedays = this.$store.state.gamedays;
+				this.dataLoaded = true;
+			})
+
+			// // const betsCategoriesData = await getBetsTypeCategories(token);
+			// // const players = await getPlayersTeam(token);
+			// const bets = await getBets(token, this.$store.state.user.id);
+			// if (bets) {
+			// 	this.$store.commit('storeBetsCategories', betsCategoriesData);
+			// 	this.$store.commit('storeTeamMates', players);
+			// 	this.$store.commit('storeGameDays', [
+			// 		betsCategoriesData,
+			// 		gamedaysdata
+			// 	]);
+			// 	this.$store.commit('storeBets', bets);
+			// 	if (this.$store.state.gamedays.nextGame !== null) {
+			// 		this.gamedays = this.$store.state.gamedays;
+			// 		this.dataLoaded = true;
+			// 	}
+			// }
 		}
 	}
 };
