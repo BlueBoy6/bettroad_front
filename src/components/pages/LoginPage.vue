@@ -15,13 +15,21 @@
 					:color="colorInputs"
 					:append-icon="showMdp ? 'mdi-eye' : 'mdi-eye-off'"
 					@click:append="showMdp = !showMdp"
+					@keydown="keyDownSwitcher"
 					outlined
 				></v-text-field>
 				<v-row justify="end">
 					<v-col cols="auto" class="py-0">
-						<v-btn class="" :class="colorBtn" @click="connect" large float-right
-							>Go parier !</v-btn
-						>
+						<v-btn class="" :class="colorBtn" @click="connect" large float-right> 
+							Go parier !
+							<v-progress-circular
+							v-if="waitForLog"
+								:size="10"
+								:width="2"
+								:color="colorBackgroundLight"
+								indeterminate
+							/>
+							</v-btn>
 					</v-col>
 				</v-row>
 			</v-col>
@@ -31,20 +39,27 @@
 
 <script>
 /* eslint-disable no-console */
-import { colorInputs, colorBtn } from '../../sass/colors.vars';
+import { colorInputs, colorBtn, colorBackgroundLight } from '../../sass/colors.vars';
 import { loginConnect } from '../../helpers/login';
 export default {
 	data() {
 		return {
 			colorInputs,
 			colorBtn,
+			colorBackgroundLight,
 			login: '',
 			password: '',
-			showMdp: false
+			showMdp: false,
+			waitForLog: false
 		};
 	},
 	methods: {
+		keyDownSwitcher: function(e){
+			console.log('e',e)
+			if(e.key === "Enter") return this.connect()
+		},
 		connect: async function() {
+			this.waitForLog = true;
 			const connection = await loginConnect(this.login, this.password);
 			if (connection.status === 'OK') {
 				this.$store.commit('login', connection.user);

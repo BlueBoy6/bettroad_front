@@ -1,9 +1,12 @@
 /* eslint-disable no-console */
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { storeGameDays } from './gamedays';
 import { storeBets } from './storeBets';
 import { postBets } from './postBetAction';
+import { getGamedays } from './getGamedays';
+import { getAllBets } from './getAllBets';
+import { getTeammates } from './getTeammates';
+import { getTeams } from './getTeams';
 Vue.use(Vuex);
 export default new Vuex.Store({
 	state: {
@@ -13,16 +16,8 @@ export default new Vuex.Store({
 			role: null,
 			token: localStorage.userToken || null
 		},
-		gamedays: {
-			nextGame: null,
-			futureGames: null,
-			pastGames: null
-		},
-		bets: {
-			nextGame: null,
-			pastGames: null
-		},
-		betsCategorie: null,
+		gamedays: null,
+		bets: null,
 		teamMates: null
 	},
 	mutations: {
@@ -36,20 +31,43 @@ export default new Vuex.Store({
 				role: null,
 				token: null
 			};
+			state.gamedays = null;
+			state.bets = null;
+			state.teamMates = null;
 		},
-		storeBetsCategories(state, payload) {
-			state.betsCategorie = payload;
+		storeGamedays(state, payload) {
+			state.gamedays = payload;
 		},
-		storeTeamMates(state, payload) {
+		storeTeammates(state, payload) {
 			state.teamMates = payload;
 		},
-		postBetCommit(state, payload) {
-			state.bets.nextGame = payload;
+		storeTeamschampionship(state, payload) {
+			state.teamsChampionship = payload;
 		},
-		storeGameDays,
+		storeNextGameBet(state, payload) {
+			console.log('state.bets :', state.bets);
+			state.gamedays.nextGame = {
+				...state.gamedays.nextGame,
+				betSubmited: payload
+			};
+			console.log('after state.bets :', state.bets);
+		},
+		storeFindedSubmitedNextGame(state, payload) {
+			state.gamedays.nextGame = {
+				...state.gamedays.nextGame,
+				betSubmited: payload
+			};
+		},
+		storeAllBets(state, payload) {
+			state.bets = payload;
+		},
 		storeBets
 	},
 	actions: {
-		postBets
+		postBets,
+		getGamedays,
+		getAllBets,
+		getTeammates,
+		getTeams
 	}
 });

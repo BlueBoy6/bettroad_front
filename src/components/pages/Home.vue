@@ -1,3 +1,4 @@
+
 <template>
 	<v-container v-if="dataLoaded" class="dashboard">
 		<v-row justify="center">
@@ -8,7 +9,7 @@
 	</v-container>
 	<v-container v-else>
 		<v-row>
-			<v-col cols="8" offset="2" class="loading">
+			<v-col cols="8" offset="2" class="loading" align="center">
 				<v-progress-circular
 					:size="130"
 					:width="7"
@@ -22,12 +23,6 @@
 
 <script>
 /* eslint-disable no-console */
-import { getGameDays } from '../../helpers/calendar';
-import {
-	getBetsTypeCategories,
-	getPlayersTeam,
-	getBets
-} from '../../helpers/betsdata';
 import {
 	colorBackgroundLight,
 	colorBackgroundDark,
@@ -58,26 +53,21 @@ export default {
 				path: '/'
 			});
 		}
-		this.fetchGameData(token);
+		this.initApp();
 	},
 	methods: {
-		fetchGameData: async function(token) {
-			const gamedaysdata = await getGameDays(token);
-			const betsCategoriesData = await getBetsTypeCategories(token);
-			const players = await getPlayersTeam(token);
-			const bets = await getBets(token, this.$store.state.user.id);
-			if (bets) {
-				this.$store.commit('storeBetsCategories', betsCategoriesData);
-				this.$store.commit('storeTeamMates', players);
-				this.$store.commit('storeGameDays', [
-					betsCategoriesData,
-					gamedaysdata
-				]);
-				this.$store.commit('storeBets', bets);
-				if (this.$store.state.gamedays.nextGame !== null) {
+		initApp: async function() {
+			if(this.$store.state.gamedays === null) {
+				const getGames = await this.$store.dispatch('getGamedays');
+				const getBets = await this.$store.dispatch('getAllBets');
+				if(getGames.statusText === "OK" && getBets.statusText === "OK"){
 					this.gamedays = this.$store.state.gamedays;
 					this.dataLoaded = true;
 				}
+			}
+			else{
+				this.gamedays = this.$store.state.gamedays;
+				this.dataLoaded = true;
 			}
 		}
 	}

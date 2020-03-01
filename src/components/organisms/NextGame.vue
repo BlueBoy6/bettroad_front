@@ -6,35 +6,52 @@
 			:class="[spaceInside, colorBackgroundLight, darkText]"
 		>
 			<p class="subtitle-1 mb-0">
-				<!-- <v-icon :color="colorBackgroundDark">mdi-map-marker-radius</v-icon> -->
 				<span>{{ game.city }}</span>
 			</p>
 			<p class="headline font-weight-bold">{{ game.day.fr }}</p>
+			<!-- SI UN PARI A DEJA ETE SOUMIS -->
 			<v-row v-if="nextGameSubmited">
 				<v-col class="py-0">
 					<p class="title">T'as parié sur</p>
 					<div
 						v-bind:key="i"
-						v-for="(betted, i) in betSubmited"
+						v-for="(betted, i) in nextGameBetsSubmited"
 						class="bets__submited mt-2"
 					>
 						<p class="pa-2 ma-0 body-2" :class="[colorBtn, whiteText]">
-							{{ betted.betType }}
+							{{ betted.label }}
 						</p>
-						<p class="pa-2 ma-0 body-2">{{ betted.betSubmited }}</p>
+						<p
+							v-if="betted.__component === 'betcategories.player-choice'"
+							class="pa-2 ma-0 body-2"
+						>
+							{{ betted.result.name }}
+						</p>
+						<p
+							v-else-if="
+								betted.__component === 'betcategories.team-choice'
+							"
+							class="pa-2 ma-0 body-2"
+						>
+							{{ betted.result.name }} - {{ betted.result.city }}
+						</p>
+						<p v-else class="pa-2 ma-0 body-2">
+							{{ betted.result }}
+						</p>
 					</div>
 				</v-col>
 			</v-row>
+			<!-- SI AUCUN PARIS N'A ETE SOUMIS POUR CE GAMEDAY -->
 			<v-row justify="end" v-else>
 				<v-col>
 					<v-card
 						v-bind:key="bet.name"
-						v-for="bet in game.betstypes"
+						v-for="bet in game.betslist"
 						class="mt-1 pa-3 subtitle-1 bets__available"
 						:class="whiteText"
 						elevation="5"
 						width="100%"
-						>{{ bet.name }}</v-card
+						>{{ bet.label }}</v-card
 					>
 					<v-btn
 						class="mt-10"
@@ -48,6 +65,8 @@
 				</v-col>
 			</v-row>
 		</v-card>
+
+		<!-- LORSQU'ON CLIQUE SUR PARI -->
 		<v-overlay
 			:absolute="false"
 			:opacity="1"
@@ -62,16 +81,16 @@
 					<div
 						class="headline font-weight-bold"
 						:class="spaceInside"
-						v-for="(bet, i) in game.betstypes"
-						v-bind:key="bet.name"
+						v-for="(bet, i) in game.betslist"
+						v-bind:key="bet.label"
 					>
-						<p :class="darkText">{{ bet.name }}</p>
+						<p :class="darkText">{{ bet.label }}</p>
 						<BetSwitch
 							:id="i"
-							:type="bet.betstype_categorie"
+							:type="bet.__component"
 							:idBet="bet.id"
 							expanded
-							@input="e => changeValueBet(e, i)"
+							@input="e => changeValueBet(e, i, bet.label)"
 						/>
 					</div>
 					<v-snackbar
@@ -145,7 +164,8 @@ export default {
 				},
 				bets: []
 			},
-			betSubmited: this.$store.state.bets.nextGame,
+			betSubmited: null,
+			nextGameBetsSubmited: null,
 			//improve error message
 			error: { status: false, message: '' },
 			nextGameOverlay: false,
@@ -160,12 +180,13 @@ export default {
 		};
 	},
 	methods: {
-		changeValueBet: function(e, i) {
+		changeValueBet: function(e, i, label) {
 			const betValueFormated = {
 				id: i,
 				idBet: e.idBet,
 				value: e.value,
-				idType: e.type.id
+				type: e.type,
+				label
 			};
 			const indexOfBet = this.bet.bets.findIndex(bet => bet.id === i);
 			if (indexOfBet === -1)
@@ -173,25 +194,38 @@ export default {
 			return (this.bet.bets[indexOfBet] = betValueFormated);
 		},
 		submitBet: function() {
-			if (this.bet.bets.length < this.game.betstypes.length) {
+			if (this.bet.bets.length < this.game.betslist.length) {
 				return (this.error = {
 					status: true,
 					message: "Tu n'as pas remplies tous les champs !"
 				});
 			}
+			//console.log('filter', this.bet.bets.filter(bet => bet.value.length === 0))
+			// if(this.bet.bets.filter(bet => bet.value.length === 0).length > 0){
+			// 	return (this.error = {
+			// 		status: true,
+			// 		message: "T'as oublié de remplir l'un des champs !"
+			// 	});
+			// }
 			const betToSubmit = this.bet;
-			this.$store
-				.dispatch('postBets', betToSubmit)
-				.then(result => (this.betSubmited = result));
+			this.$store.dispatch('postBets', betToSubmit).then(result => {
+				this.nextGameBetsSubmited = this.$store.state.gamedays.nextGame.betSubmited;
+				this.betSubmited = result;
+			});
 			this.nextGameOverlay = false;
 		}
 	},
 	computed: {
 		nextGameSubmited: function() {
-			if (this.$store.state.bets.nextGame !== null) {
+			if (this.$store.state.gamedays.nextGame.betSubmited) {
 				return true;
 			}
 			return false;
+		}
+	},
+	mounted: function() {
+		if (this.$store.state.gamedays.nextGame.betSubmited) {
+			this.nextGameBetsSubmited = this.$store.state.gamedays.nextGame.betSubmited.betsSubmited_TEST;
 		}
 	}
 };
