@@ -2,6 +2,7 @@
 import { getBets } from '../helpers/betsdata';
 
 export const getAllBets = async function(context) {
+	console.log('get all bettttttssss');
 	const allBets = await getBets(
 		context.state.user.token,
 		context.state.user.id
@@ -10,7 +11,7 @@ export const getAllBets = async function(context) {
 	const nextGamedayAlreadyBetted = allBets.filter(
 		bet => bet.gameday.id === context.state.gamedays.nextGame.id
 	);
-	if (nextGamedayAlreadyBetted) {
+	if (nextGamedayAlreadyBetted.length === 1) {
 		console.log('jusque la tout va bien ', nextGamedayAlreadyBetted);
 		context.commit(
 			'storeFindedSubmitedNextGame',

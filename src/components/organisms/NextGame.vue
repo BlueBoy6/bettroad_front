@@ -165,8 +165,7 @@ export default {
 				bets: []
 			},
 			betSubmited: null,
-			nextGameBetsSubmited: this.$store.state.gamedays.nextGame.betSubmited
-				.betsSubmited_TEST,
+			nextGameBetsSubmited: null,
 			//improve error message
 			error: { status: false, message: '' },
 			nextGameOverlay: false,
@@ -209,26 +208,27 @@ export default {
 			// 	});
 			// }
 			const betToSubmit = this.bet;
-			this.$store
-				.dispatch('postBets', betToSubmit)
-				.then(result => (this.betSubmited = result));
+			this.$store.dispatch('postBets', betToSubmit).then(result => {
+				this.nextGameBetsSubmited = this.$store.state.gamedays.nextGame.betSubmited;
+				console.log('1', this.nextGameBetsSubmited);
+				console.log('2', this.$store.state.gamedays.nextGame.betSubmited);
+				this.betSubmited = result;
+			});
 			this.nextGameOverlay = false;
 		}
 	},
 	computed: {
 		nextGameSubmited: function() {
 			if (this.$store.state.gamedays.nextGame.betSubmited) {
-				console.log(
-					'eefe',
-					this.$store.state.gamedays.nextGame.betSubmited
-				);
 				return true;
 			}
 			return false;
 		}
 	},
 	mounted: function() {
-		console.log('nextGameBetsSubmited', this.nextGameBetsSubmited);
+		if (this.$store.state.gamedays.nextGame.betSubmited) {
+			this.nextGameBetsSubmited = this.$store.state.gamedays.nextGame.betSubmited.betsSubmited_TEST;
+		}
 	}
 };
 </script>

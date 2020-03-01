@@ -6,6 +6,7 @@ import momentfr from '../helpers/momentfr';
 
 export const getGamedays = async function(context) {
 	momentfr;
+	console.log('get all gamedayyyyyys');
 	const games = await getCalendar(context.state.user.token);
 	if (games) {
 		const pastGames = games

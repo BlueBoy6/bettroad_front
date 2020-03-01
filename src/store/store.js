@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { storeGameDays } from './gamedays';
 import { storeBets } from './storeBets';
 import { postBets } from './postBetAction';
 import { getGamedays } from './getGamedays';
@@ -32,6 +31,9 @@ export default new Vuex.Store({
 				role: null,
 				token: null
 			};
+			state.gamedays = null;
+			state.bets = null;
+			state.teamMates = null;
 		},
 		storeGamedays(state, payload) {
 			state.gamedays = payload;
@@ -44,8 +46,10 @@ export default new Vuex.Store({
 		},
 		storeNextGameBet(state, payload) {
 			console.log('state.bets :', state.bets);
-
-			state.bets = { nextGame: payload };
+			state.gamedays.nextGame = {
+				...state.gamedays.nextGame,
+				betSubmited: payload
+			};
 			console.log('after state.bets :', state.bets);
 		},
 		storeFindedSubmitedNextGame(state, payload) {
@@ -57,7 +61,6 @@ export default new Vuex.Store({
 		storeAllBets(state, payload) {
 			state.bets = payload;
 		},
-		storeGameDays,
 		storeBets
 	},
 	actions: {

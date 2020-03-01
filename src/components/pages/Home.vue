@@ -1,3 +1,4 @@
+
 <template>
 	<v-container v-if="dataLoaded" class="dashboard">
 		<v-row justify="center">
@@ -8,7 +9,7 @@
 	</v-container>
 	<v-container v-else>
 		<v-row>
-			<v-col cols="8" offset="2" class="loading">
+			<v-col cols="8" offset="2" class="loading" align="center">
 				<v-progress-circular
 					:size="130"
 					:width="7"
@@ -53,16 +54,13 @@ export default {
 			});
 		}
 		this.initApp();
-		
 	},
 	methods: {
 		initApp: async function() {
 			if(this.$store.state.gamedays === null) {
 				const getGames = await this.$store.dispatch('getGamedays');
 				const getBets = await this.$store.dispatch('getAllBets');
-				console.log('home : ', getGames)
-				console.log('home : ', getBets)
-				if(getGames.statusText === "OK"){
+				if(getGames.statusText === "OK" && getBets.statusText === "OK"){
 					this.gamedays = this.$store.state.gamedays;
 					this.dataLoaded = true;
 				}
