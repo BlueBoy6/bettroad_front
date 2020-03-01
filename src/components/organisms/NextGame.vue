@@ -15,13 +15,29 @@
 					<p class="title">T'as parié sur</p>
 					<div
 						v-bind:key="i"
-						v-for="(betted, i) in betSubmited"
+						v-for="(betted, i) in nextGameBetsSubmited"
 						class="bets__submited mt-2"
 					>
 						<p class="pa-2 ma-0 body-2" :class="[colorBtn, whiteText]">
-							{{ betted.betType }}
+							{{ betted.label }}
 						</p>
-						<p class="pa-2 ma-0 body-2">{{ betted.betSubmited }}</p>
+						<p
+							v-if="betted.__component === 'betcategories.player-choice'"
+							class="pa-2 ma-0 body-2"
+						>
+							{{ betted.result.name }}
+						</p>
+						<p
+							v-else-if="
+								betted.__component === 'betcategories.team-choice'
+							"
+							class="pa-2 ma-0 body-2"
+						>
+							{{ betted.result.name }} - {{ betted.result.city }}
+						</p>
+						<p v-else class="pa-2 ma-0 body-2">
+							{{ betted.result }}
+						</p>
 					</div>
 				</v-col>
 			</v-row>
@@ -148,7 +164,9 @@ export default {
 				},
 				bets: []
 			},
-			betSubmited: this.$store.state.bets.nextGame,
+			betSubmited: null,
+			nextGameBetsSubmited: this.$store.state.gamedays.nextGame.betSubmited
+				.betsSubmited_TEST,
 			//improve error message
 			error: { status: false, message: '' },
 			nextGameOverlay: false,
@@ -169,7 +187,7 @@ export default {
 				idBet: e.idBet,
 				value: e.value,
 				type: e.type,
-				label,
+				label
 			};
 			const indexOfBet = this.bet.bets.findIndex(bet => bet.id === i);
 			if (indexOfBet === -1)
@@ -199,11 +217,18 @@ export default {
 	},
 	computed: {
 		nextGameSubmited: function() {
-			if (this.$store.state.bets.nextGame !== null) {
+			if (this.$store.state.gamedays.nextGame.betSubmited) {
+				console.log(
+					'eefe',
+					this.$store.state.gamedays.nextGame.betSubmited
+				);
 				return true;
 			}
 			return false;
 		}
+	},
+	mounted: function() {
+		console.log('nextGameBetsSubmited', this.nextGameBetsSubmited);
 	}
 };
 </script>

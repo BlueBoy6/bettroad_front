@@ -32,6 +32,6 @@ export const getGamedays = async function(context) {
 			pastgames: pastGames
 		};
 		context.commit('storeGamedays', storeGames);
-		return storeGames;
+		return { statusText: 'OK' };
 	}
 };

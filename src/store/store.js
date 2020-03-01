@@ -5,6 +5,7 @@ import { storeGameDays } from './gamedays';
 import { storeBets } from './storeBets';
 import { postBets } from './postBetAction';
 import { getGamedays } from './getGamedays';
+import { getAllBets } from './getAllBets';
 import { getTeammates } from './getTeammates';
 import { getTeams } from './getTeams';
 Vue.use(Vuex);
@@ -16,16 +17,8 @@ export default new Vuex.Store({
 			role: null,
 			token: localStorage.userToken || null
 		},
-		gamedays: {
-			nextGame: null,
-			futureGames: null,
-			pastGames: null
-		},
-		bets: {
-			nextGame: null,
-			pastGames: null
-		},
-		betsCategorie: null,
+		gamedays: null,
+		bets: null,
 		teamMates: null
 	},
 	mutations: {
@@ -49,8 +42,20 @@ export default new Vuex.Store({
 		storeTeamschampionship(state, payload) {
 			state.teamsChampionship = payload;
 		},
-		postBetCommit(state, payload) {
-			state.bets.nextGame = payload;
+		storeNextGameBet(state, payload) {
+			console.log('state.bets :', state.bets);
+
+			state.bets = { nextGame: payload };
+			console.log('after state.bets :', state.bets);
+		},
+		storeFindedSubmitedNextGame(state, payload) {
+			state.gamedays.nextGame = {
+				...state.gamedays.nextGame,
+				betSubmited: payload
+			};
+		},
+		storeAllBets(state, payload) {
+			state.bets = payload;
 		},
 		storeGameDays,
 		storeBets
@@ -58,6 +63,7 @@ export default new Vuex.Store({
 	actions: {
 		postBets,
 		getGamedays,
+		getAllBets,
 		getTeammates,
 		getTeams
 	}

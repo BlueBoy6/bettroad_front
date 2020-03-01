@@ -52,32 +52,25 @@ export default {
 				path: '/'
 			});
 		}
-		this.fetchGameData();
+		this.initApp();
+		
 	},
 	methods: {
-		fetchGameData: async function() {
-			// const gamedays = await getGameDays(token);
-			this.$store.dispatch('getGamedays').then(() =>{
+		initApp: async function() {
+			if(this.$store.state.gamedays === null) {
+				const getGames = await this.$store.dispatch('getGamedays');
+				const getBets = await this.$store.dispatch('getAllBets');
+				console.log('home : ', getGames)
+				console.log('home : ', getBets)
+				if(getGames.statusText === "OK"){
+					this.gamedays = this.$store.state.gamedays;
+					this.dataLoaded = true;
+				}
+			}
+			else{
 				this.gamedays = this.$store.state.gamedays;
 				this.dataLoaded = true;
-			})
-
-			// // const betsCategoriesData = await getBetsTypeCategories(token);
-			// // const players = await getPlayersTeam(token);
-			// const bets = await getBets(token, this.$store.state.user.id);
-			// if (bets) {
-			// 	this.$store.commit('storeBetsCategories', betsCategoriesData);
-			// 	this.$store.commit('storeTeamMates', players);
-			// 	this.$store.commit('storeGameDays', [
-			// 		betsCategoriesData,
-			// 		gamedaysdata
-			// 	]);
-			// 	this.$store.commit('storeBets', bets);
-			// 	if (this.$store.state.gamedays.nextGame !== null) {
-			// 		this.gamedays = this.$store.state.gamedays;
-			// 		this.dataLoaded = true;
-			// 	}
-			// }
+			}
 		}
 	}
 };

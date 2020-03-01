@@ -58,21 +58,21 @@ export default {
 		items: Array,
 		expanded: Boolean,
 		id: Number,
-		idBet: Number,
+		idBet: Number
 	},
 	beforeMount() {
-		if(this.type === 'betcategories.player-choice'){
+		if (this.type === 'betcategories.player-choice') {
 			this.$store.dispatch('getTeammates').then(result => {
-				console.log('dispatcher  : ', result)
+				console.log('dispatcher  : ', result);
 				this.itemsList = result;
 				this.loaded = true;
-			})
-		} else if(this.type === 'betcategories.team-choice'){
+			});
+		} else if (this.type === 'betcategories.team-choice') {
 			this.$store.dispatch('getTeams').then(result => {
-				console.log('dispatcher  : ', result)
+				console.log('dispatcher  : ', result);
 				this.itemsList = result;
 				this.loaded = true;
-			})
+			});
 		}
 	},
 	data() {
@@ -94,11 +94,11 @@ export default {
 		choiceSwitcher: function() {
 			return this.colorInputs;
 		},
-		playersList: function(){
-			return this.itemsList.map(v => v.name)
+		playersList: function() {
+			return this.itemsList.map(v => v.name);
 		},
-		teamsList: function(){
-			return this.itemsList.map(v => v.city)
+		teamsList: function() {
+			return this.itemsList.map(v => v.city);
 		}
 	},
 	methods: {
@@ -112,17 +112,19 @@ export default {
 		},
 		itemSelectedAction: function(e) {
 			this.itemSelected = e;
-			console.log('event :',e)
 			let infoFilter;
-			if(this.type === 'betcategories.team-choice'){
-				infoFilter = this.$store.state.teamsChampionship.filter(team => team.city === e);
-			} else if(this.type === 'betcategories.player-choice'){
-				console.log(this.$store.state)
-				infoFilter = this.$store.state.teamMates.filter(player => player.name === e);
-			} else if(this.type === 'betcategories.yes-no-choice'){
+			if (this.type === 'betcategories.team-choice') {
+				infoFilter = this.$store.state.teamsChampionship.filter(
+					team => team.city === e
+				);
+			} else if (this.type === 'betcategories.player-choice') {
+				infoFilter = this.$store.state.teamMates.filter(
+					player => player.name === e
+				);
+			} else if (this.type === 'betcategories.yes-no-choice') {
 				infoFilter = e;
 			}
-			
+
 			this.$emit('input', {
 				id: this.id,
 				idBet: this.idBet,
@@ -130,8 +132,7 @@ export default {
 				type: this.type
 			});
 		}
-	},
-	
+	}
 };
 </script>
 
