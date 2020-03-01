@@ -210,8 +210,6 @@ export default {
 			const betToSubmit = this.bet;
 			this.$store.dispatch('postBets', betToSubmit).then(result => {
 				this.nextGameBetsSubmited = this.$store.state.gamedays.nextGame.betSubmited;
-				console.log('1', this.nextGameBetsSubmited);
-				console.log('2', this.$store.state.gamedays.nextGame.betSubmited);
 				this.betSubmited = result;
 			});
 			this.nextGameOverlay = false;
