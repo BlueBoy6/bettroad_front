@@ -47,7 +47,7 @@ export default {
 	flex-wrap: nowrap;
 	scrollbar-width: thin;
 	.col__vignet__pastgame{
-		min-width: 80vw;
+		min-width: 80%;
 	}
 }
 </style>
