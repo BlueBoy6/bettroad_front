@@ -7,7 +7,7 @@
 			<v-btn
 				v-bind:key="bool"
 				v-for="bool in YesNo"
-				:class="itemSelected === bool && colorBtn"
+				:class="itemSelected === bool ? colorBtn : colorBackgroundDark"
 				@click="() => itemSelectedAction(bool)"
 				>{{ bool }}</v-btn
 			>
@@ -50,7 +50,7 @@ import {
 	whiteText,
 	darkText,
 	spaceInside
-} from '../../sass/colors.vars';
+} from '../../style/colors.vars';
 
 export default {
 	props: {
@@ -63,13 +63,11 @@ export default {
 	beforeMount() {
 		if (this.type === 'betcategories.player-choice') {
 			this.$store.dispatch('getTeammates').then(result => {
-				console.log('dispatcher  : ', result);
 				this.itemsList = result;
 				this.loaded = true;
 			});
 		} else if (this.type === 'betcategories.team-choice') {
 			this.$store.dispatch('getTeams').then(result => {
-				console.log('dispatcher  : ', result);
 				this.itemsList = result;
 				this.loaded = true;
 			});

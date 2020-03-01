@@ -39,7 +39,7 @@
 
 <script>
 /* eslint-disable no-console */
-import { colorInputs, colorBtn, colorBackgroundLight } from '../../sass/colors.vars';
+import { colorInputs, colorBtn, colorBackgroundLight } from '../../style/colors.vars';
 import { loginConnect } from '../../helpers/login';
 export default {
 	data() {
@@ -55,7 +55,6 @@ export default {
 	},
 	methods: {
 		keyDownSwitcher: function(e){
-			console.log('e',e)
 			if(e.key === "Enter") return this.connect()
 		},
 		connect: async function() {

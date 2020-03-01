@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { colorInputs } from "../src/sass/colors.vars";
+import { colorInputs } from "../src/style/colors.vars";
 export default {
   data() {
     return {

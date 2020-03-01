@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<p class="display-1 mb-5" :class="[whiteText]">Prochain match</p>
-		<v-card
+		<v-sheet
 			class="display-1 event__card"
 			:class="[spaceInside, colorBackgroundLight, darkText]"
 		>
@@ -18,7 +18,7 @@
 						v-for="(betted, i) in nextGameBetsSubmited"
 						class="bets__submited mt-2"
 					>
-						<p class="pa-2 ma-0 body-2" :class="[colorBtn, whiteText]">
+						<p class="pa-2 ma-0 body-2" :class="[colorBackgroundDark, whiteText]">
 							{{ betted.label }}
 						</p>
 						<p
@@ -48,7 +48,7 @@
 						v-bind:key="bet.name"
 						v-for="bet in game.betslist"
 						class="mt-1 pa-3 subtitle-1 bets__available"
-						:class="whiteText"
+						:class="[whiteText, colorBackgroundDark]"
 						elevation="5"
 						width="100%"
 						>{{ bet.label }}</v-card
@@ -64,7 +64,7 @@
 					>
 				</v-col>
 			</v-row>
-		</v-card>
+		</v-sheet>
 
 		<!-- LORSQU'ON CLIQUE SUR PARI -->
 		<v-overlay
@@ -146,8 +146,8 @@ import {
 	whiteText,
 	darkText,
 	spaceInside
-} from '../../sass/colors.vars';
-import BetSwitch from '../atoms/betsSwitch';
+} from '../../../style/colors.vars';
+import BetSwitch from '../../atoms/betsSwitch';
 export default {
 	components: {
 		BetSwitch
@@ -200,13 +200,6 @@ export default {
 					message: "Tu n'as pas remplies tous les champs !"
 				});
 			}
-			//console.log('filter', this.bet.bets.filter(bet => bet.value.length === 0))
-			// if(this.bet.bets.filter(bet => bet.value.length === 0).length > 0){
-			// 	return (this.error = {
-			// 		status: true,
-			// 		message: "T'as oublié de remplir l'un des champs !"
-			// 	});
-			// }
 			const betToSubmit = this.bet;
 			this.$store.dispatch('postBets', betToSubmit).then(result => {
 				this.nextGameBetsSubmited = this.$store.state.gamedays.nextGame.betSubmited;
@@ -232,14 +225,14 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../sass/mixins.scss';
+@import '../../../style/mixins.scss';
 
 .bets__submited {
 	p:first-child {
 		border-radius: 4px 4px 0 0;
 	}
 	p:last-child {
-		border: 2px solid #303f9f;
+		border: 2px solid #263238;
 		border-top: none;
 		border-radius: 0 0 4px 4px;
 	}

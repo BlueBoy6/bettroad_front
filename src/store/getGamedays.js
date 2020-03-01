@@ -28,8 +28,8 @@ export const getGamedays = async function(context) {
 
 		const storeGames = {
 			nextGame: futureGames[0],
-			futuregames: futureGames.splice(1, futureGames.length),
-			pastgames: pastGames
+			futureGames: futureGames.splice(1, futureGames.length),
+			pastGames: pastGames
 		};
 		context.commit('storeGamedays', storeGames);
 		return { statusText: 'OK' };

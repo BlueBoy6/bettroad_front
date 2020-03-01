@@ -4,6 +4,7 @@
 		<v-row justify="center">
 			<v-col cols="12" md="8">
 				<NextGame :game="gamedays.nextGame" />
+				<PastGames :games="gamedays.pastGames" />
 			</v-col>
 		</v-row>
 	</v-container>
@@ -29,10 +30,12 @@ import {
 	whiteText,
 	darkText,
 	spaceInside
-} from '../../sass/colors.vars';
-import NextGame from '../organisms/NextGame';
+} from '../../../style/colors.vars';
+import NextGame from './NextGame';
+import PastGames from './PastGames';
 export default {
 	components: {
+		PastGames,
 		NextGame
 	},
 	data() {
@@ -55,6 +58,7 @@ export default {
 		}
 		this.initApp();
 	},
+
 	methods: {
 		initApp: async function() {
 			if(this.$store.state.gamedays === null) {

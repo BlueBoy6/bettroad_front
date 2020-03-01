@@ -45,12 +45,10 @@ export default new Vuex.Store({
 			state.teamsChampionship = payload;
 		},
 		storeNextGameBet(state, payload) {
-			console.log('state.bets :', state.bets);
 			state.gamedays.nextGame = {
 				...state.gamedays.nextGame,
 				betSubmited: payload
 			};
-			console.log('after state.bets :', state.bets);
 		},
 		storeFindedSubmitedNextGame(state, payload) {
 			state.gamedays.nextGame = {
@@ -58,8 +56,8 @@ export default new Vuex.Store({
 				betSubmited: payload
 			};
 		},
-		storeAllBets(state, payload) {
-			state.bets = payload;
+		storePastGames(state, payload) {
+			state.gamedays.pastGames = payload;
 		},
 		storeBets
 	},
