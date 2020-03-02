@@ -3,10 +3,11 @@
     <p class="subtitle-1 mb-0">
       <span>{{ game.city }}</span>
     </p>
-    <p class="headline font-weight-bold">{{ game.day.fr }}</p>
+    <p class="headline font-weight-bold mb-1">{{ game.day.fr }}</p>
+    <p class="subtitle">{{percentOfSuccess >= 50 ? '🎯' : '🌧'}} {{percentOfSuccess}}% de réussite</p>
     <v-expansion-panels>
       <ExpansionPannelResult
-        :betSubmited="game.submited ? game.betSubmited[i] : null "
+        :betSubmited="game.betSubmited ? game.betSubmited[i] : null "
         :bet="bet"
         :key="i"
         v-for="(bet, i) in game.betslist"
@@ -47,6 +48,16 @@ export default {
     betlabel() {
       if (this.game.betSubmited) return;
       return this.game.betslist.label;
+    },
+    percentOfSuccess: function() {
+      if (this.game.betSubmited) {
+        const gamesBetsWin = this.game.betslist.filter((bet, i) => {
+          return bet.result === this.game.betSubmited[i].result;
+        });
+        const percent = (gamesBetsWin.length / this.game.betslist.length) * 100;
+        return percent;
+      }
+      return 0;
     }
   }
 };

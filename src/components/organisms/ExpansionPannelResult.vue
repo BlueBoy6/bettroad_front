@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panel :class="[goodResultOrNot]" dark="false">
+  <v-expansion-panel :class="[goodResultOrNotColor]" dark="false">
     <v-expansion-panel-header>{{bet.label}}</v-expansion-panel-header>
     <v-expansion-panel-content>
       <v-row>
@@ -7,7 +7,7 @@
           <v-sheet
             v-if="bet.result"
             :class="[colorBackgroundLight, darkText, spaceInside]"
-          >Résultat juste : {{bet.result.name ? bet.result.name : bet.result }}</v-sheet>
+          >✔️ Résultat : {{bet.result.name ? bet.result.name : bet.result }}</v-sheet>
           <v-sheet
             v-else
             :class="[colorBackgroundLight, darkText, spaceInside]"
@@ -17,11 +17,11 @@
           <v-sheet
             v-if="betSubmited !== null"
             :class="[colorBackgroundLight, darkText, spaceInside]"
-          >Ton paris : {{betSubmited.result.name ? betSubmited.result.name : betSubmited.result }}</v-sheet>
+          >{{isGoodResult ? '✔️': '❌'}} Ton paris : {{betSubmited.result.name ? betSubmited.result.name : betSubmited.result }}</v-sheet>
           <v-sheet
             v-else
             :class="[colorErrorModal, whiteText, spaceInside]"
-          >Hé con, t'as pas parié là ! 👎</v-sheet>
+          >👎 Hé con, t'as pas parié là !</v-sheet>
         </v-col>
       </v-row>
     </v-expansion-panel-content>
@@ -56,8 +56,12 @@ export default {
       darkText
     };
   },
+  mounted() {
+    // console.log("this.betSubmited", this.betSubmited);
+    // console.log("this.bet", this.bet);
+  },
   computed: {
-    goodResultOrNot: function() {
+    goodResultOrNotColor: function() {
       if (this.betSubmited !== null) {
         if (this.bet.result === this.betSubmited.result) {
           return this.colorSuccess;
@@ -65,6 +69,15 @@ export default {
         return colorErrorModal;
       }
       return this.colorBackgroundDark;
+    },
+    isGoodResult: function() {
+      if (this.betSubmited !== null) {
+        if (this.bet.result === this.betSubmited.result) {
+          return true;
+        }
+        return false;
+      }
+      return false;
     }
   }
 };
