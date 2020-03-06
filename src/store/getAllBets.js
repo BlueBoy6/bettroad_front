@@ -7,39 +7,45 @@ export const getAllBets = async function(context) {
 		context.state.user.id
 	);
 
+	let nextGameBet;
 	// catch bet already stored
-	const nextGamedayAlreadyBetted = allBets.filter(
-		bet => bet.gameday.id === context.state.gamedays.nextGame.id
-	);
-	const pastGamesBets = allBets
-		.map(bet => {
-			const findgame = context.state.gamedays.pastGames.filter(
-				game => game.id === bet.gameday.id
-			);
-			if (findgame.length !== 0)
-				// return { ...findgame[0], betSubmited: bet.betsSubmited_TEST };
-				console.log("bet", bet);
-			console.log("findgame[0]", findgame[0]);
-			return {
-				...findgame[0],
-				betslist: bet.betslist.map((betB, j) => {
-					return { ...betB, submited: bet.betsSubmited_TEST[j].result };
-				})
-			};
-		})
-		.filter(Boolean);
-	console.log("pastGamesBets : ", pastGamesBets);
-	const pastGamesBetsRebuilt = context.state.gamedays.pastGames.map(game => {
-		const idgame = game.id;
-		const pastgameslist = pastGamesBets.filter(pgame => pgame.id === idgame);
-		if (pastgameslist.length === 0) return game;
-		return pastgameslist[0];
+	const allbetsWithoutNextGame = allBets.map(bet => {
+		if (bet.gameday.id === context.state.gamedays.nextGame.id) {
+			nextGameBet = bet;
+		}
+		return bet;
 	});
+	console.log("nextGameBet : ", nextGameBet);
 
-	context.commit("storePastGames", pastGamesBetsRebuilt);
+	console.log("allbets : ", allBets);
+	const pastGames = context.state.gamedays.pastGames;
+	const pastGamesWithBets = pastGames.map(game => {
+		const betMatchedWithGame = allbetsWithoutNextGame.filter(
+			bet => bet.gameday.id === game.id
+		);
+		if (betMatchedWithGame.length > 0) {
+			console.log("game", game);
+			const gameBetsListRebuilt = game.betslist.map((bet, i) => {
+				return {
+					...bet,
+					betsubmited: {
+						label: betMatchedWithGame[0].betsSubmited_TEST[i].label,
+						result: betMatchedWithGame[0].betsSubmited_TEST[i].result
+					}
+				};
+			});
+			const gameRebuilt = { ...game, betslist: gameBetsListRebuilt };
+			console.log("gameRebuilt", gameRebuilt);
+			return gameRebuilt;
+		}
+		return game;
+	});
+	console.log("pastGamesWithBets", pastGamesWithBets);
 
-	if (nextGamedayAlreadyBetted.length === 1) {
-		context.commit("storeFindedSubmitedNextGame", nextGamedayAlreadyBetted[0]);
+	context.commit("storePastGames", pastGamesWithBets);
+
+	if (nextGameBet) {
+		context.commit("storeFindedSubmitedNextGame", nextGameBet);
 	}
 
 	if (allBets) return { statusText: "OK" };
