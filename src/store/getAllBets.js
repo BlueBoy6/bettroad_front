@@ -7,24 +7,29 @@ export const getAllBets = async function(context) {
 		context.state.user.id
 	);
 
+	// init next game
 	let nextGameBet;
-	// catch bet already stored
+
+	// catch bet who who's next game
 	const allbetsWithoutNextGame = allBets.map(bet => {
 		if (bet.gameday.id === context.state.gamedays.nextGame.id) {
 			nextGameBet = bet;
 		}
 		return bet;
 	});
-	console.log("nextGameBet : ", nextGameBet);
 
-	console.log("allbets : ", allBets);
+	// fetch past games
 	const pastGames = context.state.gamedays.pastGames;
+
+	// rebuilder function to inject results
 	const pastGamesWithBets = pastGames.map(game => {
+		// Match the bet who got the gameday id
 		const betMatchedWithGame = allbetsWithoutNextGame.filter(
 			bet => bet.gameday.id === game.id
 		);
+
+		// If we found a bet
 		if (betMatchedWithGame.length > 0) {
-			console.log("game", game);
 			const gameBetsListRebuilt = game.betslist.map((bet, i) => {
 				return {
 					...bet,
@@ -34,19 +39,34 @@ export const getAllBets = async function(context) {
 					}
 				};
 			});
+
+			// return the game with the bets submited
 			const gameRebuilt = { ...game, betslist: gameBetsListRebuilt };
-			console.log("gameRebuilt", gameRebuilt);
+			console.log("gameREBUILD IN", gameRebuilt);
 			return gameRebuilt;
 		}
-		return game;
+		// console.log("game", game);
+		// if no bet found or matched return game with betslist equal to null
+		const gameRebuilt = {
+			...game,
+			betslist: game.betslist.length > 0 ? game.betslist : null
+		};
+		console.log("gameREBUILD OUT", gameRebuilt);
+		return gameRebuilt;
 	});
-	console.log("pastGamesWithBets", pastGamesWithBets);
 
+	console.log("pastGamesWithBets", pastGamesWithBets);
+	// store past games
 	context.commit("storePastGames", pastGamesWithBets);
 
 	if (nextGameBet) {
+		// if next game bet was founded store this one
 		context.commit("storeFindedSubmitedNextGame", nextGameBet);
 	}
 
+	// return a dispatch if bets was found
 	if (allBets) return { statusText: "OK" };
+
+	// return a dispatch if no bets was found
+	return { statusText: "KO" };
 };
