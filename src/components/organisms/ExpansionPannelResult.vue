@@ -2,8 +2,8 @@
 	<v-expansion-panel :class="[goodResultOrNotColor]" dark="false">
 		<v-expansion-panel-header>{{ bet.label }}</v-expansion-panel-header>
 		<v-expansion-panel-content>
-			<v-row>
-				<v-col>
+			<v-row class="row__result">
+				<v-col class="row__result__good">
 					<v-sheet
 						v-if="bet.result"
 						:class="[colorBackgroundLight, darkText, spaceInside]"
@@ -14,9 +14,9 @@
 						>Aucun résultat renseigné. 😴</v-sheet
 					>
 				</v-col>
-				<v-col>
+				<v-col class="row__result__user">
 					<v-sheet
-						v-if="bet.betsubmited !== null"
+						v-if="bet.betsubmited"
 						:class="[colorBackgroundLight, darkText, spaceInside]"
 						>{{ isGoodResult ? "✔️" : "❌" }} Ton paris :
 						{{
@@ -67,7 +67,8 @@
 		},
 		computed: {
 			goodResultOrNotColor: function() {
-				if (this.bet.betsubmited !== undefined) {
+				// console.log('bet', this.bet)
+				if (this.bet.betsubmited) {
 					if (this.bet.result === this.bet.betsubmited.result) {
 						return this.colorSuccess;
 					}
@@ -76,14 +77,8 @@
 				return this.colorBackgroundDark;
 			},
 			isGoodResult: function() {
-				// console.log(" ");
 				// console.log("this.bet", this.bet);
 				if (this.bet.betsubmited !== null) {
-					// console.log(
-					// 	"this.bet.betsubmited.result",
-					// 	this.bet.betsubmited.result
-					// );
-					// console.log("this.bet.result", this.bet.result);
 					if (this.bet.result === this.bet.betsubmited.result) {
 						return true;
 					}
@@ -95,4 +90,13 @@
 	};
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.row__result{
+	&__good{
+		padding-right: 0px;
+	}
+	&__user{
+		padding-left: 0px;
+	}
+}
+</style>

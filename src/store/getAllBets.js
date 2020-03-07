@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { getBets } from "../helpers/betsdata";
+import { getBets } from '../helpers/betsdata';
 
 export const getAllBets = async function(context) {
 	const allBets = await getBets(
@@ -28,11 +28,15 @@ export const getAllBets = async function(context) {
 			bet => bet.gameday.id === game.id
 		);
 
+		console.log('betMatchedWithGame', betMatchedWithGame);
 		// If we found a bet
 		if (betMatchedWithGame.length > 0) {
 			const gameBetsListRebuilt = game.betslist.map((bet, i) => {
 				return {
 					...bet,
+					success:
+						bet.result ===
+						betMatchedWithGame[0].betsSubmited_TEST[i].result,
 					betsubmited: {
 						label: betMatchedWithGame[0].betsSubmited_TEST[i].label,
 						result: betMatchedWithGame[0].betsSubmited_TEST[i].result
@@ -42,8 +46,17 @@ export const getAllBets = async function(context) {
 
 			// return the game with the bets submited
 			const gameRebuilt = { ...game, betslist: gameBetsListRebuilt };
-			console.log("gameREBUILD IN", gameRebuilt);
-			return gameRebuilt;
+			let successNbr = 0;
+			for (let i = 0; i < gameRebuilt.betslist.length; i++) {
+				gameRebuilt.betslist[i].success && successNbr++;
+			}
+			const successPercent =
+				(successNbr / gameRebuilt.betslist.length) * 100;
+			const gameRebuiltWithSuccessPercent = {
+				...gameRebuilt,
+				successPercent: successPercent
+			};
+			return gameRebuiltWithSuccessPercent;
 		}
 		// console.log("game", game);
 		// if no bet found or matched return game with betslist equal to null
@@ -51,22 +64,20 @@ export const getAllBets = async function(context) {
 			...game,
 			betslist: game.betslist.length > 0 ? game.betslist : null
 		};
-		console.log("gameREBUILD OUT", gameRebuilt);
+		// console.log('gameREBUILD OUT', gameRebuilt);
 		return gameRebuilt;
 	});
 
-	console.log("pastGamesWithBets", pastGamesWithBets);
-	// store past games
-	context.commit("storePastGames", pastGamesWithBets);
+	context.commit('storePastGames', pastGamesWithBets);
 
 	if (nextGameBet) {
 		// if next game bet was founded store this one
-		context.commit("storeFindedSubmitedNextGame", nextGameBet);
+		context.commit('storeFindedSubmitedNextGame', nextGameBet);
 	}
 
 	// return a dispatch if bets was found
-	if (allBets) return { statusText: "OK" };
+	if (allBets) return { statusText: 'OK' };
 
 	// return a dispatch if no bets was found
-	return { statusText: "KO" };
+	return { statusText: 'KO' };
 };
