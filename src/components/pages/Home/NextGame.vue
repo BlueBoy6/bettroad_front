@@ -73,8 +73,9 @@
 			:value="nextGameOverlay"
 			:z-index="99"
 		>
-			<v-container class="layer__bets">
+			<v-container ref="vbetcontainer" class="layer__bets" >
 				<v-sheet
+					ref="vbetcontainerSheet"
 					width="100%"
 					:class="[spaceInside, colorBackgroundLight, darkText]"
 				>
@@ -214,7 +215,7 @@ export default {
 				return true;
 			}
 			return false;
-		}
+		},
 	},
 	mounted: function() {
 		if (this.$store.state.gamedays.nextGame.betSubmited) {
@@ -241,10 +242,14 @@ export default {
 .layer__bets {
 	max-height: 95vh;
 	overflow: scroll;
-	@include media-min('laptop') {
-		max-height: 95vh;
-		overflow: hidden;
-	}
+	scrollbar-width: thin;
+	::-webkit-scrollbar {
+    width: 5px;
+}
+	// @include media-min('laptop') {
+	// 	max-height: 95vh;
+	// 	overflow: hidden;
+	// }
 	.v-input {
 		&__slot {
 			margin-bottom: 0;

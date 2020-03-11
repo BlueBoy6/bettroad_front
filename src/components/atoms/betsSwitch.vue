@@ -31,6 +31,7 @@
 		/>
 		<v-text-field
 			v-if="type === 'betcategories.number-choice'"
+			type="number"
 			color="white"
 			@input="changeInputField"
 			:background-color="colorBackgroundDark"
@@ -144,5 +145,10 @@ export default {
 		display: flex;
 		flex-grow: 1;
 	}
+}
+.v-text-field .v-input__control input[type="number"]{
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: textfield;
 }
 </style>
