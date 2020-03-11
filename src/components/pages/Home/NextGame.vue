@@ -9,38 +9,44 @@
 				<span>{{ game.city }}</span>
 			</p>
 			<p class="headline font-weight-bold">{{ game.day.fr }}</p>
+
 			<!-- SI UN PARI A DEJA ETE SOUMIS -->
-			<v-row v-if="nextGameSubmited">
+			<v-row v-if="nextGameSubmited !== null">
 				<v-col class="py-0">
 					<p class="title">T'as parié sur</p>
 					<div
-						v-bind:key="i"
-						v-for="(betted, i) in nextGameBetsSubmited"
+						:key="i"
+						v-for="(betted, i) in nextGameSubmited"
 						class="bets__submited mt-2"
 					>
-						<p class="pa-2 ma-0 body-2" :class="[colorBackgroundDark, whiteText]">
+						<p
+							class="pa-2 ma-0 body-2"
+							:class="[colorBackgroundDark, whiteText]"
+						>
 							{{ betted.label }}
 						</p>
 						<p
 							v-if="betted.__component === 'betcategories.player-choice'"
 							class="pa-2 ma-0 body-2"
 						>
-							{{ betted.result.name }}
+							{{ betted.betsubmited.result.name }}
 						</p>
 						<p
-							v-else-if="
-								betted.__component === 'betcategories.team-choice'
-							"
+							v-else-if="betted.__component === 'betcategories.team-choice'"
 							class="pa-2 ma-0 body-2"
 						>
-							{{ betted.result.name }} - {{ betted.result.city }}
+							{{ betted.betsubmited.result.name }} - {{ betted.result.city }}
 						</p>
 						<p v-else class="pa-2 ma-0 body-2">
-							{{ betted.result }}
+							{{ betted.betsubmited.result }}
 						</p>
 					</div>
+					<router-link to="/nextgame-modifier">
+						Modifier mon pari
+					</router-link>
 				</v-col>
 			</v-row>
+
 			<!-- SI AUCUN PARIS N'A ETE SOUMIS POUR CE GAMEDAY -->
 			<v-row justify="end" v-else>
 				<v-col>
@@ -73,7 +79,7 @@
 			:value="nextGameOverlay"
 			:z-index="99"
 		>
-			<v-container ref="vbetcontainer" class="layer__bets" >
+			<v-container ref="vbetcontainer" class="layer__bets">
 				<v-sheet
 					ref="vbetcontainerSheet"
 					width="100%"
@@ -94,10 +100,7 @@
 							@input="e => changeValueBet(e, i, bet.label)"
 						/>
 					</div>
-					<v-snackbar
-						absolute
-						v-model="error.status"
-						:color="colorErrorModal"
+					<v-snackbar absolute v-model="error.status" :color="colorErrorModal"
 						>{{ error.message }}
 						<v-btn
 							class="mx-2"
@@ -112,11 +115,7 @@
 					</v-snackbar>
 					<v-row :class="spaceInside">
 						<v-col justify="center" align="center">
-							<v-btn
-								:color="colorBtn"
-								@click="submitBet"
-								large
-								width="100%"
+							<v-btn :color="colorBtn" @click="submitBet" large width="100%"
 								>Prends mon paris là !</v-btn
 							>
 							<br />
@@ -137,126 +136,119 @@
 </template>
 
 <script>
-/* eslint-disable no-console */
-import {
-	colorBackgroundLight,
-	colorBackgroundDark,
-	colorErrorModal,
-	colorSuccess,
-	colorBtn,
-	whiteText,
-	darkText,
-	spaceInside
-} from '../../../style/colors.vars';
-import BetSwitch from '../../atoms/betsSwitch';
-export default {
-	components: {
-		BetSwitch
-	},
-	props: {
-		game: Object
-	},
-	data() {
-		return {
-			bet: {
-				gameday: {
-					id: this.game.id,
-					date: this.game.day.en
+	/* eslint-disable no-console */
+	import {
+		colorBackgroundLight,
+		colorBackgroundDark,
+		colorErrorModal,
+		colorSuccess,
+		colorBtn,
+		whiteText,
+		darkText,
+		spaceInside
+	} from "../../../style/colors.vars";
+	import BetSwitch from "../../atoms/betsSwitch";
+	export default {
+		components: {
+			BetSwitch
+		},
+		props: {
+			game: Object
+		},
+		data() {
+			return {
+				bet: {
+					gameday: {
+						id: this.game.id,
+						date: this.game.day.en
+					},
+					bets: []
 				},
-				bets: []
-			},
-			betSubmited: null,
-			nextGameBetsSubmited: null,
-			//improve error message
-			error: { status: false, message: '' },
-			nextGameOverlay: false,
-			colorBackgroundLight,
-			colorBackgroundDark,
-			colorErrorModal,
-			whiteText,
-			darkText,
-			spaceInside,
-			colorBtn,
-			colorSuccess
-		};
-	},
-	methods: {
-		changeValueBet: function(e, i, label) {
-			const betValueFormated = {
-				id: i,
-				idBet: e.idBet,
-				value: e.value,
-				type: e.type,
-				label
+				// betSubmited: null,
+				nextGameSubmited: null,
+				//improve error message
+				error: { status: false, message: "" },
+				nextGameOverlay: false,
+				colorBackgroundLight,
+				colorBackgroundDark,
+				colorErrorModal,
+				whiteText,
+				darkText,
+				spaceInside,
+				colorBtn,
+				colorSuccess
 			};
-			const indexOfBet = this.bet.bets.findIndex(bet => bet.id === i);
-			if (indexOfBet === -1)
-				return (this.bet.bets = [...this.bet.bets, betValueFormated]);
-			return (this.bet.bets[indexOfBet] = betValueFormated);
 		},
-		submitBet: function() {
-			if (this.bet.bets.length < this.game.betslist.length) {
-				return (this.error = {
-					status: true,
-					message: "Tu n'as pas remplies tous les champs !"
+		methods: {
+			changeValueBet: function(e, i, label) {
+				const betValueFormated = {
+					id: i,
+					idBet: e.idBet,
+					value: e.value,
+					type: e.type,
+					label
+				};
+				const indexOfBet = this.bet.bets.findIndex(bet => bet.id === i);
+				if (indexOfBet === -1)
+					return (this.bet.bets = [...this.bet.bets, betValueFormated]);
+				return (this.bet.bets[indexOfBet] = betValueFormated);
+			},
+			submitBet: function() {
+				if (this.bet.bets.length < this.game.betslist.length) {
+					return (this.error = {
+						status: true,
+						message: "Tu n'as pas remplies tous les champs !"
+					});
+				}
+				const betToSubmit = this.bet;
+				this.$store.dispatch("postBets", betToSubmit).then(() => {
+					this.nextGameSubmited = this.$store.state.gamedays.nextGame.betslist;
 				});
+				this.nextGameOverlay = false;
 			}
-			const betToSubmit = this.bet;
-			this.$store.dispatch('postBets', betToSubmit).then(result => {
-				this.nextGameBetsSubmited = this.$store.state.gamedays.nextGame.betSubmited;
-				this.betSubmited = result;
-			});
-			this.nextGameOverlay = false;
-		}
-	},
-	computed: {
-		nextGameSubmited: function() {
-			if (this.$store.state.gamedays.nextGame.betSubmited) {
-				return true;
-			}
-			return false;
 		},
-	},
-	mounted: function() {
-		if (this.$store.state.gamedays.nextGame.betSubmited) {
-			this.nextGameBetsSubmited = this.$store.state.gamedays.nextGame.betSubmited.betsSubmited_TEST;
+		mounted: function() {
+			if (
+				this.$store.state.gamedays.nextGame.betslist[0].betsubmited !== null
+			) {
+				this.nextGameSubmited = this.$store.state.gamedays.nextGame.betslist;
+			}
 		}
-	}
-};
+	};
 </script>
 
 <style lang="scss">
-@import '../../../style/mixins.scss';
+	@import "../../../style/mixins.scss";
 
-.bets__submited {
-	p:first-child {
-		border-radius: 4px 4px 0 0;
-	}
-	p:last-child {
-		border: 2px solid #263238;
-		border-top: none;
-		border-radius: 0 0 4px 4px;
-	}
-}
-
-.layer__bets {
-	max-height: 95vh;
-	overflow: scroll;
-	scrollbar-width: thin;
-	::-webkit-scrollbar {
-    width: 5px;
-}
-	// @include media-min('laptop') {
-	// 	max-height: 95vh;
-	// 	overflow: hidden;
-	// }
-	.v-input {
-		&__slot {
-			margin-bottom: 0;
+	.bets__submited {
+		p:first-child {
+			border-radius: 4px 4px 0 0;
 		}
-		.v-text-field__details {
-			display: none;
+		p:last-child {
+			border: 2px solid #263238;
+			border-top: none;
+			border-radius: 0 0 4px 4px;
 		}
 	}
-}
+
+	.layer__bets {
+		max-height: 95vh;
+		overflow: scroll;
+		scrollbar-width: thin;
+		::-webkit-scrollbar {
+			width: 5px;
+		}
+		// @include media-min('laptop') {
+		// 	max-height: 95vh;
+		// 	overflow: hidden;
+		// }
+		.v-input {
+			&__slot {
+				margin-bottom: 0;
+			}
+			.v-text-field__details {
+				display: none;
+			}
+		}
+	}
 </style>

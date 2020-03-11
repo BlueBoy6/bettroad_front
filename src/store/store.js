@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
-import Vue from 'vue';
-import Vuex from 'vuex';
-import { storeBets } from './storeBets';
-import { postBets } from './postBetAction';
-import { getGamedays } from './getGamedays';
-import { getAllBets } from './getAllBets';
-import { getTeammates } from './getTeammates';
-import { getTeams } from './getTeams';
+import Vue from "vue";
+import Vuex from "vuex";
+import { storeBets } from "./storeBets";
+import { postBets } from "./postBetAction";
+import { getGamedays } from "./getGamedays";
+import { getAllBets } from "./getAllBets";
+import { getTeammates } from "./getTeammates";
+import { getTeams } from "./getTeams";
 Vue.use(Vuex);
 export default new Vuex.Store({
 	state: {
@@ -44,17 +44,14 @@ export default new Vuex.Store({
 		storeTeamschampionship(state, payload) {
 			state.teamsChampionship = payload;
 		},
-		storeNextGameBet(state, payload) {
-			state.gamedays.nextGame = {
-				...state.gamedays.nextGame,
-				betSubmited: payload
-			};
-		},
 		storeFindedSubmitedNextGame(state, payload) {
 			state.gamedays.nextGame = {
 				...state.gamedays.nextGame,
 				betSubmited: payload
 			};
+		},
+		storeNextGame(state, payload) {
+			state.gamedays.nextGame = payload;
 		},
 		storePastGames(state, payload) {
 			state.gamedays.pastGames = payload;

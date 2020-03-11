@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { postBet } from '../helpers/betsdata';
+import { postBet } from "../helpers/betsdata";
 export const postBets = async function(context, payload) {
 	const dataBets = payload.bets;
 	const gamedayDate = payload.gameday.id;
@@ -13,9 +13,21 @@ export const postBets = async function(context, payload) {
 		})
 	};
 	const postAction = await postBet(context.state.user.token, tryPost);
-	if (postAction.status === 'OK') {
+	if (postAction.status === "OK") {
 		const nextGameBetSubmited = postAction.data.betsSubmited_TEST;
-		context.commit('storeNextGameBet', nextGameBetSubmited);
+		const rebuiltNextGame = {
+			...context.state.gamedays.nextGame,
+			betslist: context.state.gamedays.nextGame.betslist.map((bet, i) => {
+				return {
+					...bet,
+					betsubmited: {
+						label: nextGameBetSubmited[i].label,
+						result: nextGameBetSubmited[i].result
+					}
+				};
+			})
+		};
+		context.commit("storeNextGame", rebuiltNextGame);
 		return nextGameBetSubmited;
 	}
 };
