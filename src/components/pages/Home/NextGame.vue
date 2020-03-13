@@ -41,9 +41,9 @@
 							{{ betted.betsubmited.result }}
 						</p>
 					</div>
-					<router-link to="/nextgame-modifier">
+					<v-btn to="/nextgame-modifier">
 						Modifier mon pari
-					</router-link>
+					</v-btn>
 				</v-col>
 			</v-row>
 

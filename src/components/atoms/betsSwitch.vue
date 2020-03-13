@@ -19,14 +19,16 @@
 			:items="playersList"
 			@change="itemSelectedAction"
 			:background-color="colorBackgroundDark"
+			:value="defaultValueInput"
 			solo
 		/>
 		<v-select
 			label="Choisi l'équipe"
 			v-if="type === 'betcategories.team-choice' && loaded"
 			:items="teamsList"
-			@change="itemSelectedAction"
 			:background-color="colorBackgroundDark"
+			@change="itemSelectedAction"
+			:value="defaultValueInput"
 			solo
 		/>
 		<v-text-field
@@ -35,6 +37,7 @@
 			color="white"
 			@input="changeInputField"
 			:background-color="colorBackgroundDark"
+			:value="defaultValueInput"
 			outlined
 			flat
 		/>
@@ -42,113 +45,121 @@
 </template>
 
 <script>
-/* eslint-disable no-console */
-import {
-	colorInputs,
-	colorBackgroundLight,
-	colorBackgroundDark,
-	colorBtn,
-	whiteText,
-	darkText,
-	spaceInside
-} from '../../style/colors.vars';
+	/* eslint-disable no-console */
+	import {
+		colorInputs,
+		colorBackgroundLight,
+		colorBackgroundDark,
+		colorBtn,
+		whiteText,
+		darkText,
+		spaceInside
+	} from "../../style/colors.vars";
 
-export default {
-	props: {
-		type: String,
-		items: Array,
-		expanded: Boolean,
-		id: Number,
-		idBet: Number
-	},
-	beforeMount() {
-		if (this.type === 'betcategories.player-choice') {
-			this.$store.dispatch('getTeammates').then(result => {
-				this.itemsList = result;
-				this.loaded = true;
-			});
-		} else if (this.type === 'betcategories.team-choice') {
-			this.$store.dispatch('getTeams').then(result => {
-				this.itemsList = result;
-				this.loaded = true;
-			});
-		}
-	},
-	data() {
-		return {
-			itemSelected: null,
-			colorBackgroundLight,
-			colorBackgroundDark,
-			YesNo: ['Oui', 'Non'],
-			itemsList: null,
-			loaded: false,
-			whiteText,
-			darkText,
-			spaceInside,
-			colorInputs,
-			colorBtn
-		};
-	},
-	computed: {
-		choiceSwitcher: function() {
-			return this.colorInputs;
+	export default {
+		props: {
+			type: String,
+			items: Array,
+			expanded: Boolean,
+			id: Number,
+			idBet: Number,
+			defaultValue: [String, Object, Number]
 		},
-		playersList: function() {
-			return this.itemsList.map(v => v.name);
-		},
-		teamsList: function() {
-			return this.itemsList.map(v => v.city);
-		}
-	},
-	methods: {
-		changeInputField: function(e) {
-			this.$emit('input', {
-				id: this.id,
-				idBet: this.idBet,
-				value: e,
-				type: this.type
-			});
-		},
-		itemSelectedAction: function(e) {
-			this.itemSelected = e;
-			let infoFilter;
-			if (this.type === 'betcategories.team-choice') {
-				infoFilter = this.$store.state.teamsChampionship.filter(
-					team => team.city === e
-				);
-			} else if (this.type === 'betcategories.player-choice') {
-				infoFilter = this.$store.state.teamMates.filter(
-					player => player.name === e
-				);
-			} else if (this.type === 'betcategories.yes-no-choice') {
-				infoFilter = e;
+		beforeMount() {
+			if (this.type === "betcategories.player-choice") {
+				this.$store.dispatch("getTeammates").then(result => {
+					this.itemsList = result;
+					this.loaded = true;
+				});
+			} else if (this.type === "betcategories.team-choice") {
+				this.$store.dispatch("getTeams").then(result => {
+					this.itemsList = result;
+					this.loaded = true;
+				});
 			}
+		},
+		data() {
+			return {
+				itemSelected: null,
+				colorBackgroundLight,
+				colorBackgroundDark,
+				YesNo: ["Oui", "Non"],
+				itemsList: null,
+				loaded: false,
+				whiteText,
+				darkText,
+				spaceInside,
+				colorInputs,
+				colorBtn
+			};
+		},
+		computed: {
+			choiceSwitcher: function() {
+				return this.colorInputs;
+			},
+			playersList: function() {
+				return this.itemsList.map(v => v.name);
+			},
+			teamsList: function() {
+				return this.itemsList.map(v => v.city);
+			},
+			defaultValueInput: function() {
+				if (this.type === "betcategories.player-choice")
+					return this.defaultValue.name;
+				if (this.type === "betcategories.team-choice")
+					return this.defaultValue.name;
+				return this.defaultValue;
+			}
+		},
+		methods: {
+			changeInputField: function(e) {
+				this.$emit("input", {
+					id: this.id,
+					idBet: this.idBet,
+					value: e,
+					type: this.type
+				});
+			},
+			itemSelectedAction: function(e) {
+				this.itemSelected = e;
+				let infoFilter;
+				if (this.type === "betcategories.team-choice") {
+					infoFilter = this.$store.state.teamsChampionship.filter(
+						team => team.city === e
+					);
+				} else if (this.type === "betcategories.player-choice") {
+					infoFilter = this.$store.state.teamMates.filter(
+						player => player.name === e
+					);
+				} else if (this.type === "betcategories.yes-no-choice") {
+					infoFilter = e;
+				}
 
-			this.$emit('input', {
-				id: this.id,
-				idBet: this.idBet,
-				value: infoFilter,
-				type: this.type
-			});
+				this.$emit("input", {
+					id: this.id,
+					idBet: this.idBet,
+					value: infoFilter,
+					type: this.type
+				});
+			}
 		}
-	}
-};
+	};
 </script>
 
 <style lang="scss">
-.v-menu__content {
-	scrollbar-width: thin;
-}
-.expanded {
-	width: 100%;
-	& > * {
-		display: flex;
-		flex-grow: 1;
+	.v-menu__content {
+		scrollbar-width: thin;
 	}
-}
-.v-text-field .v-input__control input[type="number"]{
-	appearance: none;
-	-webkit-appearance: none;
-	-moz-appearance: textfield;
-}
+	.expanded {
+		width: 100%;
+		& > * {
+			display: flex;
+			flex-grow: 1;
+		}
+	}
+	.v-text-field .v-input__control input[type="number"] {
+		appearance: none;
+		-webkit-appearance: none;
+		-moz-appearance: textfield;
+	}
 </style>

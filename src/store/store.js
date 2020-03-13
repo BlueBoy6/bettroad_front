@@ -3,6 +3,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import { storeBets } from "./storeBets";
 import { postBets } from "./postBetAction";
+import { updateBetNextGame } from "./updateBetNextGame";
 import { getGamedays } from "./getGamedays";
 import { getAllBets } from "./getAllBets";
 import { getTeammates } from "./getTeammates";
@@ -60,6 +61,7 @@ export default new Vuex.Store({
 	},
 	actions: {
 		postBets,
+		updateBetNextGame,
 		getGamedays,
 		getAllBets,
 		getTeammates,
