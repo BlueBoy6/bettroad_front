@@ -208,7 +208,12 @@
 			}
 		},
 		mounted: function() {
+			console.log(
+				"this.$store.state.gamedays.nextGame",
+				this.$store.state.gamedays.nextGame
+			);
 			if (
+				this.$store.state.gamedays.nextGame.betslist.length > 0 &&
 				this.$store.state.gamedays.nextGame.betslist[0].betsubmited !== null
 			) {
 				this.nextGameSubmited = this.$store.state.gamedays.nextGame.betslist;
