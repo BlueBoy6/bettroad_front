@@ -121,14 +121,11 @@
 						message: "Tu n'as pas remplies tous les champs !"
 					});
 				}
-				console.log("betToSubmit", this.game);
 				const betToSubmit = {
 					gamedayId: this.game.id,
 					bets: this.betsController
 				};
-				console.log("betToSubmit", betToSubmit);
-				this.$store.dispatch("postBets", betToSubmit).then(result => {
-					console.log("result", result);
+				this.$store.dispatch("postBets", betToSubmit).then(() => {
 					this.nextGameSubmited = this.$store.state.gamedays.nextGame.betslist;
 				});
 				this.$emit("close");

@@ -31,7 +31,6 @@ export const getGamedays = async function(context) {
 			futureGames: futureGames.splice(1, futureGames.length),
 			pastGames: pastGames
 		};
-		console.log("storeGames : ", storeGames);
 		context.commit("storeGamedays", storeGames);
 		return { statusText: "OK" };
 	}

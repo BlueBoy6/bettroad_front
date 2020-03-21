@@ -57,74 +57,73 @@
 </template>
 
 <script>
-/* eslint-disable no-console */
-import {
-	colorInputs,
-	colorBtn,
-	colorBackgroundLight,
-	colorBackgroundDark,
-	colorErrorModal
-} from '../../style/colors.vars';
-import { loginConnect } from '../../helpers/login';
-export default {
-	data() {
-		return {
-			colorInputs,
-			colorBtn,
-			colorErrorModal,
-			colorBackgroundLight,
-			colorBackgroundDark,
-			login: '',
-			password: '',
-			showMdp: false,
-			waitForLog: false,
-			error: {
-				status: false,
-				message: 'Ton mot de passe ou ton identifiant est incorrect !'
-			}
-		};
-	},
-	methods: {
-		keyDownSwitcher: function(e) {
-			if (e.key === 'Enter') return this.connect();
+	/* eslint-disable no-console */
+	import {
+		colorInputs,
+		colorBtn,
+		colorBackgroundLight,
+		colorBackgroundDark,
+		colorErrorModal
+	} from "../../style/colors.vars";
+	import { loginConnect } from "../../helpers/login";
+	export default {
+		data() {
+			return {
+				colorInputs,
+				colorBtn,
+				colorErrorModal,
+				colorBackgroundLight,
+				colorBackgroundDark,
+				login: "",
+				password: "",
+				showMdp: false,
+				waitForLog: false,
+				error: {
+					status: false,
+					message: "Ton mot de passe ou ton identifiant est incorrect !"
+				}
+			};
 		},
-		connect: async function() {
-			this.waitForLog = true;
-			const connection = await loginConnect(this.login, this.password);
-			console.log('connection', connection);
-			if (connection.status === 'OK') {
-				this.$store.commit('login', connection.user);
+		methods: {
+			keyDownSwitcher: function(e) {
+				if (e.key === "Enter") return this.connect();
+			},
+			connect: async function() {
+				this.waitForLog = true;
+				const connection = await loginConnect(this.login, this.password);
+				if (connection.status === "OK") {
+					this.$store.commit("login", connection.user);
+					this.$router.push({
+						path: "/dashboard"
+					});
+				} else {
+					this.waitForLog = false;
+					this.error.status = true;
+				}
+			}
+		},
+		mounted() {
+			if (
+				localStorage.userId !== undefined &&
+				localStorage.userToken !== undefined
+			) {
 				this.$router.push({
-					path: '/dashboard'
+					path: "/dashboard"
 				});
-			} else {
-				this.waitForLog = false;
-				this.error.status = true;
 			}
 		}
-	},
-	mounted() {
-		if (
-			localStorage.userId !== undefined &&
-			localStorage.userToken !== undefined
-		) {
-			this.$router.push({
-				path: '/dashboard'
-			});
-		}
-	}
-};
+	};
 </script>
 
 <style lang="scss">
-.modal__container {
-	min-height: 100%;
-	.modal__connect__row {
-		height: 100%;
-		.modal__connect {
-			border-radius: 4px;
-			position: relative;
+	.modal__container {
+		min-height: 100%;
+		.modal__connect__row {
+			height: 100%;
+			.modal__connect {
+				border-radius: 4px;
+				position: relative;
+			}
 		}
 	}
-}
 </style>

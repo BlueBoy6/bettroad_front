@@ -7,8 +7,6 @@ export const getAllBets = async function(context) {
 		context.state.user.id
 	);
 
-	console.log("allbets : ", allBets);
-
 	// init next game
 	let nextGameBet;
 
@@ -66,7 +64,6 @@ export const getAllBets = async function(context) {
 			...game,
 			betslist: game.betslist.length > 0 ? game.betslist : null
 		};
-		// console.log('gameREBUILD OUT', gameRebuilt);
 		return gameRebuilt;
 	});
 

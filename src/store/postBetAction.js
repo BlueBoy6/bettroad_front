@@ -15,8 +15,6 @@ export const postBets = async function(context, payload) {
 		})
 	};
 
-	console.log("try post : ", postFormat);
-
 	const postAction = await postBet(context.state.user.token, postFormat);
 
 	if (postAction.status === "OK") {

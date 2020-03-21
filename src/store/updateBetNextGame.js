@@ -4,8 +4,6 @@ export const updateBetNextGame = async function(context, payload) {
 	const dataBets = payload.bets;
 	const gamedayDate = payload.gamedayId;
 
-	console.log(payload);
-
 	// Format the query
 	const postFormat = {
 		user: context.state.user.id,
@@ -21,12 +19,13 @@ export const updateBetNextGame = async function(context, payload) {
 		})
 	};
 
-	console.log("postFormat", postFormat);
+	// if no bets return immediatly error
 	if (payload.bets.length === 0)
 		return {
 			status: "KO",
 			message: "Nous n'avons pas pu modifier ton pari, réessaye plus tard !"
 		};
+
 	// Post to strapi
 	const putBet = await updateBet(
 		context.state.user.token,

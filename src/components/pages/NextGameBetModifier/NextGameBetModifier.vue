@@ -12,12 +12,13 @@
 			<div :key="bet.id" v-for="bet in nextgame.betslist">
 				<label>{{ bet.label }}</label>
 				<BetsSwitch
+					expanded
 					:type="bet.__component"
 					:defaultValue="bet.betsubmited.result"
 					@input="e => changeValueBet(e, bet.id, bet.label)"
 				/>
 			</div>
-			<div class="NGBetModifierPage__submit">
+			<div class="NGBetModifierPage__submit mt-5">
 				<v-btn :class="[colorSuccess]" large @click="submitModification">
 					<v-icon small class="mr-2">mdi-check-bold</v-icon> Modifier
 				</v-btn>
@@ -93,6 +94,17 @@
 			if (!this.nextgame) {
 				this.initApp();
 			} else {
+				console.log("this.nextgame.betslist", this.nextgame.betslist);
+				this.betsController = this.nextgame.betslist.map(bet => {
+					const betValueFormated = {
+						idBet: bet.id,
+						value: bet.betsubmited.result,
+						type: bet.__component,
+						label: bet.label
+					};
+					return betValueFormated;
+				});
+				console.log("this.betsController", this.betsController);
 				this.dataLoaded = true;
 			}
 		},
@@ -110,18 +122,17 @@
 					}
 					return bet;
 				});
-				// console.log("_");
-				// console.log("CHAAAAAANGEEEE =====================================");
-				// console.log("this.betsController", this.betsController);
-				// console.log("indexOfBet", indexOfBet);
-				// console.log("SIMULATION OF CONTROLLER :", controllerRebuilt);
 				this.betsController = controllerRebuilt;
 			},
 			submitModification: function() {
+				console.log("this.nextgame.id", this.nextgame.id);
+				console.log("this.bets", this.bets);
 				const betId = this.bets.find(bet => bet.gameday.id === this.nextgame.id)
 					.id;
+				console.log("betId", betId);
+
 				const betToSubmit = {
-					betId,
+					betId: betId,
 					gamedayId: this.nextgame.id,
 					bets: this.betsController
 				};
@@ -140,7 +151,6 @@
 				try {
 					await this.$store.dispatch("getGamedays");
 					await this.$store.dispatch("getAllBets");
-					console.log("this.nextgame", this.nextgame);
 					this.betsController = this.nextgame.betslist.map(bet => {
 						const betValueFormated = {
 							idBet: bet.id,

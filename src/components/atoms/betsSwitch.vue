@@ -1,21 +1,23 @@
 <template>
-	<div class="switcher">
+	<div class="switcher mb-2" v-if="loaded">
 		<v-btn-toggle
 			v-if="type === 'betcategories.yes-no-choice'"
 			:class="[expanded && 'expanded']"
 		>
 			<v-btn
-				v-bind:key="bool"
-				v-for="bool in YesNo"
-				:class="itemSelected === bool ? colorBtn : colorBackgroundDark"
-				@click="() => itemSelectedAction(bool)"
-				>{{ bool }}</v-btn
+				v-bind:key="value"
+				v-for="value in YesNo"
+				:class="{
+					indigo: defaultValueInput === value && itemSelected === null,
+					'indigo darken-2': itemSelected === value
+				}"
+				@click="() => itemSelectedAction(value)"
+				>{{ value }}</v-btn
 			>
-			<!-- <v-btn :class="choiceSwitcher" @click="itemSelected = 'Non'">Non</v-btn> -->
 		</v-btn-toggle>
 		<v-select
 			label="Choisi le joueur"
-			v-if="type === 'betcategories.player-choice' && loaded"
+			v-if="type === 'betcategories.player-choice'"
 			:items="playersList"
 			@change="itemSelectedAction"
 			:background-color="colorBackgroundDark"
@@ -24,7 +26,7 @@
 		/>
 		<v-select
 			label="Choisi l'équipe"
-			v-if="type === 'betcategories.team-choice' && loaded"
+			v-if="type === 'betcategories.team-choice'"
 			:items="teamsList"
 			:background-color="colorBackgroundDark"
 			@change="itemSelectedAction"
@@ -42,6 +44,16 @@
 			flat
 		/>
 	</div>
+	<v-row v-else>
+		<v-col cols="8" offset="2" class="loading" align="center">
+			<v-progress-circular
+				:size="20"
+				:width="5"
+				:color="colorBackgroundDark"
+				indeterminate
+			/>
+		</v-col>
+	</v-row>
 </template>
 
 <script>
@@ -75,6 +87,8 @@
 					this.itemsList = result;
 					this.loaded = true;
 				});
+			} else {
+				this.loaded = true;
 			}
 		},
 		data() {
@@ -92,6 +106,9 @@
 				colorBtn
 			};
 		},
+		mounted() {
+			console.log("defaultValueInput : ", this.defaultValueInput);
+		},
 		computed: {
 			choiceSwitcher: function() {
 				return this.colorInputs;
@@ -104,7 +121,6 @@
 			},
 			defaultValueInput: function() {
 				if (this.defaultValue) {
-					// console.log("this.defaultValue", this.defaultValue);
 					if (this.type === "betcategories.player-choice")
 						return this.defaultValue.name;
 					if (this.type === "betcategories.team-choice")
@@ -156,6 +172,14 @@
 		& > * {
 			display: flex;
 			flex-grow: 1;
+		}
+	}
+	.switcher {
+		.v-text-field__details {
+			margin: 0;
+			padding: 0;
+			min-height: 0;
+			display: none;
 		}
 	}
 	.v-text-field .v-input__control input[type="number"] {
