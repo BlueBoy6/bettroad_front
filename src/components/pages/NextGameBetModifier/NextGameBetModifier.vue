@@ -94,7 +94,6 @@
 			if (!this.nextgame) {
 				this.initApp();
 			} else {
-				console.log("this.nextgame.betslist", this.nextgame.betslist);
 				this.betsController = this.nextgame.betslist.map(bet => {
 					const betValueFormated = {
 						idBet: bet.id,
@@ -104,7 +103,6 @@
 					};
 					return betValueFormated;
 				});
-				console.log("this.betsController", this.betsController);
 				this.dataLoaded = true;
 			}
 		},
@@ -125,11 +123,8 @@
 				this.betsController = controllerRebuilt;
 			},
 			submitModification: function() {
-				console.log("this.nextgame.id", this.nextgame.id);
-				console.log("this.bets", this.bets);
 				const betId = this.bets.find(bet => bet.gameday.id === this.nextgame.id)
 					.id;
-				console.log("betId", betId);
 
 				const betToSubmit = {
 					betId: betId,
