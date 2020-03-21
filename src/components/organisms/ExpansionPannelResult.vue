@@ -61,13 +61,9 @@
 				darkText
 			};
 		},
-		mounted() {
-			// console.log("this.betSubmited", this.betSubmited);
-			// console.log("this.bet", this.bet);
-		},
+
 		computed: {
 			goodResultOrNotColor: function() {
-				// console.log('bet', this.bet)
 				if (this.bet.betsubmited) {
 					if (this.bet.result === this.bet.betsubmited.result) {
 						return this.colorSuccess;
@@ -77,7 +73,6 @@
 				return this.colorBackgroundDark;
 			},
 			isGoodResult: function() {
-				// console.log("this.bet", this.bet);
 				if (this.bet.betsubmited !== null) {
 					if (this.bet.result === this.bet.betsubmited.result) {
 						return true;
@@ -91,12 +86,12 @@
 </script>
 
 <style lang="scss" scoped>
-.row__result{
-	&__good{
-		padding-right: 0px;
+	.row__result {
+		&__good {
+			padding-right: 0px;
+		}
+		&__user {
+			padding-left: 0px;
+		}
 	}
-	&__user{
-		padding-left: 0px;
-	}
-}
 </style>
