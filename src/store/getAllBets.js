@@ -7,6 +7,8 @@ export const getAllBets = async function(context) {
 		context.state.user.id
 	);
 
+	console.log("allbets : ", allBets);
+
 	// init next game
 	let nextGameBet;
 
@@ -95,12 +97,9 @@ export const getAllBets = async function(context) {
 			})
 		};
 	}
-	// console.log("nextGameWithBet", nextGameWithBet);
-
-	// console.log("Next Game", nextGame);
-	// console.log("Next Bet", nextGameBet);
 
 	context.commit("storePastGames", pastGamesWithBets);
+	context.commit("storeAllBets", allBets);
 	context.commit("storeNextGame", nextGameWithBet);
 
 	// return a dispatch if bets was found
@@ -108,7 +107,6 @@ export const getAllBets = async function(context) {
 		return {
 			statusText: "OK"
 		};
-
 	// return a dispatch if no bets was found
 	return { statusText: "KO" };
 };

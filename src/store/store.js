@@ -57,6 +57,9 @@ export default new Vuex.Store({
 		storePastGames(state, payload) {
 			state.gamedays.pastGames = payload;
 		},
+		storeAllBets(state, payload) {
+			state.bets = payload;
+		},
 		storeBets
 	},
 	actions: {

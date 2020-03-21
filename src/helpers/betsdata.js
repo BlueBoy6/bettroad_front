@@ -80,10 +80,10 @@ export const postBet = async (token, datas) => {
 		console.log("error  :", err);
 	}
 };
-export const updateBet = async (token, idBet, datas) => {
+export const updateBet = async (token, datas, idBet) => {
 	try {
 		const betcall = await axios({
-			method: "post",
+			method: "put",
 			url: `${backurl}/bets/${idBet}`,
 			headers: {
 				Authorization: `Bearer ${token}`

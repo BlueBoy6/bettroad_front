@@ -61,7 +61,6 @@
 			type: String,
 			items: Array,
 			expanded: Boolean,
-			id: Number,
 			idBet: Number,
 			defaultValue: [String, Object, Number]
 		},
@@ -104,17 +103,20 @@
 				return this.itemsList.map(v => v.city);
 			},
 			defaultValueInput: function() {
-				if (this.type === "betcategories.player-choice")
-					return this.defaultValue.name;
-				if (this.type === "betcategories.team-choice")
-					return this.defaultValue.name;
-				return this.defaultValue;
+				if (this.defaultValue) {
+					// console.log("this.defaultValue", this.defaultValue);
+					if (this.type === "betcategories.player-choice")
+						return this.defaultValue.name;
+					if (this.type === "betcategories.team-choice")
+						return this.defaultValue.city;
+					return this.defaultValue;
+				}
+				return "";
 			}
 		},
 		methods: {
 			changeInputField: function(e) {
 				this.$emit("input", {
-					id: this.id,
 					idBet: this.idBet,
 					value: e,
 					type: this.type
@@ -136,7 +138,6 @@
 				}
 
 				this.$emit("input", {
-					id: this.id,
 					idBet: this.idBet,
 					value: infoFilter,
 					type: this.type

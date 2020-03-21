@@ -7,20 +7,50 @@
 			v-if="dataLoaded"
 		>
 			<h2>{{ nextgame.city }}</h2>
+			<p class="subtitle-1">{{ nextgame.day.fr }}</p>
 
-			<div :key="i" v-for="(bet, i) in nextgame.betslist">
+			<div :key="bet.id" v-for="bet in nextgame.betslist">
 				<label>{{ bet.label }}</label>
 				<BetsSwitch
 					:type="bet.__component"
 					:defaultValue="bet.betsubmited.result"
+					@input="e => changeValueBet(e, bet.id, bet.label)"
 				/>
 			</div>
 			<div class="NGBetModifierPage__submit">
-				<v-btn @click="submitModification">
-					Modifier
+				<v-btn :class="[colorSuccess]" large @click="submitModification">
+					<v-icon small class="mr-2">mdi-check-bold</v-icon> Modifier
 				</v-btn>
 			</div>
 		</v-sheet>
+		<v-row v-else>
+			<v-col cols="8" offset="2" class="loading" align="center">
+				<v-progress-circular
+					:size="130"
+					:width="7"
+					:color="colorBackgroundLight"
+					indeterminate
+				/>
+			</v-col>
+		</v-row>
+		<div class="backtohome__row ma-5">
+			<v-btn link :class="[colorBackgroundLight, darkText]" to="/dashboard">
+				<v-icon small dark class="mr-2">mdi-home</v-icon> Retour à l'accueil
+			</v-btn>
+		</div>
+		<v-snackbar absolute v-model="error.status" :color="colorErrorModal"
+			>{{ error.message }}
+			<v-btn
+				class="mx-2"
+				fab
+				dark
+				small
+				:color="colorBackgroundDark"
+				@click="() => (error.status = false)"
+			>
+				<v-icon dark>mdi-close</v-icon>
+			</v-btn>
+		</v-snackbar>
 	</div>
 </template>
 
@@ -29,8 +59,10 @@
 	import {
 		colorBackgroundLight,
 		colorBackgroundDark,
+		colorErrorModal,
+		whiteText,
+		colorSuccess,
 		darkText
-		// spaceInside
 	} from "@/style/colors.vars";
 	import BetsSwitch from "@/components/atoms/betsSwitch";
 	import { mapState } from "vuex";
@@ -41,36 +73,87 @@
 		data() {
 			return {
 				colorBackgroundLight,
+				colorSuccess,
 				colorBackgroundDark,
+				colorErrorModal,
 				darkText,
-				dataLoaded: false
+				whiteText,
+				dataLoaded: false,
+				error: { status: false, message: "" },
+				betsController: []
 			};
-		},
-		mounted() {
-			this.initApp();
-			console.log("this.state", this.$store.state);
-			if (this.dataLoaded) {
-				console.log("mapstate", this.nextgame.betslist[0]);
-			}
 		},
 		computed: {
 			...mapState({
-				nextgame: state => state.gamedays.nextGame
+				nextgame: state => state.gamedays?.nextGame,
+				bets: state => state.bets
 			})
 		},
+		async mounted() {
+			if (!this.nextgame) {
+				this.initApp();
+			} else {
+				this.dataLoaded = true;
+			}
+		},
 		methods: {
+			changeValueBet: function(e, idBet, label) {
+				const betValueFormated = {
+					idBet,
+					value: e.value,
+					type: e.type,
+					label
+				};
+				const controllerRebuilt = this.betsController.map(bet => {
+					if (bet.idBet === idBet) {
+						return betValueFormated;
+					}
+					return bet;
+				});
+				// console.log("_");
+				// console.log("CHAAAAAANGEEEE =====================================");
+				// console.log("this.betsController", this.betsController);
+				// console.log("indexOfBet", indexOfBet);
+				// console.log("SIMULATION OF CONTROLLER :", controllerRebuilt);
+				this.betsController = controllerRebuilt;
+			},
 			submitModification: function() {
-				this.$store.dispatch("");
+				const betId = this.bets.find(bet => bet.gameday.id === this.nextgame.id)
+					.id;
+				const betToSubmit = {
+					betId,
+					gamedayId: this.nextgame.id,
+					bets: this.betsController
+				};
+				this.$store.dispatch("updateBetNextGame", betToSubmit).then(result => {
+					if (result.status === "OK") {
+						return this.$router.push({ path: "/dashboard" });
+					}
+					this.error.message = result.message;
+					this.error.status = true;
+				});
+			},
+			backToHome: function() {
+				this.$router.push({ path: "/dashboard" });
 			},
 			initApp: async function() {
-				if (this.$store.state.gamedays === null) {
-					const getGames = await this.$store.dispatch("getGamedays");
-					const getBets = await this.$store.dispatch("getAllBets");
-					if (getGames.statusText === "OK" && getBets.statusText === "OK") {
-						this.dataLoaded = true;
-					}
-				} else {
+				try {
+					await this.$store.dispatch("getGamedays");
+					await this.$store.dispatch("getAllBets");
+					console.log("this.nextgame", this.nextgame);
+					this.betsController = this.nextgame.betslist.map(bet => {
+						const betValueFormated = {
+							idBet: bet.id,
+							value: bet.betsubmited.result,
+							type: bet.__component,
+							label: bet.label
+						};
+						return betValueFormated;
+					});
+
 					this.dataLoaded = true;
+				} catch (err) {
+					throw "Une erreur rencontré dans la récupération";
 				}
 			}
 		}
