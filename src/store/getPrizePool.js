@@ -39,20 +39,36 @@ export const getPrizePool = async (context, idGameday) => {
 			})
 			.filter(r => Boolean(r));
 		console.log('resultsOfPlayers : ', resultsOfPlayers);
-		const labelsPrepareCounter = goodresultsofBets.reduce(
-			(acc, curr) => acc[curr.label.split(' ').join('')],
-			{}
-		);
-		console.log('labelsPrepareCounter', labelsPrepareCounter);
-		const reducection = goodresultsofBets.reduce((acc, curr) => {
-			const labelFormat = curr.label.split(' ').join('');
-			if (!acc[labelFormat]) {
-				acc[labelFormat] = 0;
-			}
-			acc[labelFormat] += 1;
+
+		// prepare the counter
+		const labelsPrepareCounter = goodresultsofBets.reduce((acc, curr) => {
+			const labelFormat = curr.label;
+			acc[labelFormat] = 0;
 			return acc;
 		}, {});
-		console.log('reducection : ', reducection);
+		console.log('labelsPrepareCounter', labelsPrepareCounter);
+
+		// counter of wins in total
+		const counterGoodResult = resultsOfPlayers.reduce((acc, curr) => {
+			curr.betsSubmited_TEST.forEach(bet => {
+				if (bet.win) acc[bet.label] += 1;
+			});
+			return acc;
+		}, labelsPrepareCounter);
+		console.log('reducection : ', counterGoodResult);
+
+		/*
+		
+		TO DO :
+
+		Il me manque à récupérer la mise total individuel de l'année divisé par le nombre de journée
+		Ensuite je récupère les paris où j'ai gagné, je récupère les scores correspondant (counterGoodResult), et le nombre de joueurs totaux de l'équipe 
+		(car si un joueur oublie de parier son pari est considérer comme perdu)
+		et enfin je fais cagnote individuel journalier divisé par nombre de paris fois nombre de joueur de l'équipe
+		et je divise ce résultat par le score correspondant (counterGoodResult) de gagnant
+
+
+		*/
 	} catch (err) {
 		throw "Nous n'avons pas pu récupérer les données des autres joueurs";
 	}
