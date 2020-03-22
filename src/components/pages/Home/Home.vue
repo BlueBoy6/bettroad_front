@@ -3,6 +3,7 @@
 		<v-row justify="center">
 			<v-col cols="12" md="8">
 				<NextGame :game="gamedays.nextGame" />
+				<PrizePool />
 				<PersonnalStats />
 				<PastGames :games="gamedays.pastGames" />
 			</v-col>
@@ -35,12 +36,14 @@ import { mapState } from 'vuex';
 import NextGame from './NextGame/NextGame';
 import PastGames from './PastGames';
 import PersonnalStats from './PersonnalStats/PersonnalStats';
+import PrizePool from './PrizePool';
 
 export default {
 	components: {
 		PastGames,
 		NextGame,
-		PersonnalStats
+		PersonnalStats,
+		PrizePool
 	},
 	data() {
 		return {
