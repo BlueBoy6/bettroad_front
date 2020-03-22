@@ -11,10 +11,15 @@ export const getGamedays = async function(context) {
 		if (games) {
 			const gamesSortedFormated = games
 				.sort((a, b) => Date.parse(b.day) - Date.parse(a.day))
-				.map(date => {
-					return { ...date, day: dateFormater(date.day) };
+				.map((date, i) => {
+					return {
+						...date,
+						day: {
+							...dateFormater(date.day),
+							dayNumber: games.length - i
+						}
+					};
 				});
-			console.log('gamesSorted : ', gamesSortedFormated);
 
 			const pastGames = gamesSortedFormated.filter(date => {
 				return moment(date.day.en).isBefore(Date.now()) && date;
