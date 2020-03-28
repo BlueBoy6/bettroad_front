@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { getBets } from '../helpers/betsdata';
+import { getBets } from "../helpers/betsdata";
 
 export const getAllBets = async function(context) {
 	const allBets = await getBets(
@@ -34,8 +34,7 @@ export const getAllBets = async function(context) {
 				return {
 					...bet,
 					success:
-						bet.result ===
-						betMatchedWithGame[0].betsSubmited_TEST[i].result,
+						bet.result === betMatchedWithGame[0].betsSubmited_TEST[i].result,
 					betsubmited: {
 						label: betMatchedWithGame[0].betsSubmited_TEST[i].label,
 						result: betMatchedWithGame[0].betsSubmited_TEST[i].result
@@ -52,8 +51,7 @@ export const getAllBets = async function(context) {
 			for (let i = 0; i < gameRebuilt.betslist.length; i++) {
 				gameRebuilt.betslist[i].success && successNbr++;
 			}
-			const successPercent =
-				(successNbr / gameRebuilt.betslist.length) * 100;
+			const successPercent = (successNbr / gameRebuilt.betslist.length) * 100;
 			const stats = {
 				successPercent: successPercent,
 				numberOfSuccess: successNbr,
@@ -107,15 +105,15 @@ export const getAllBets = async function(context) {
 		};
 	}
 
-	context.commit('storePastGames', pastGamesWithBets);
-	context.commit('storeAllBets', allBets);
-	context.commit('storeNextGame', nextGameWithBet);
+	context.commit("storePastGames", pastGamesWithBets);
+	context.commit("storeAllBets", allBets);
+	context.commit("storeNextGame", nextGameWithBet);
 
 	// return a dispatch if bets was found
 	if (allBets)
 		return {
-			statusText: 'OK'
+			statusText: "OK"
 		};
 	// return a dispatch if no bets was found
-	return { statusText: 'KO' };
+	return { statusText: "KO" };
 };

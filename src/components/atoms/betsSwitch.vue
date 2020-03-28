@@ -78,10 +78,13 @@
 		},
 		beforeMount() {
 			if (this.type === "betcategories.player-choice") {
-				this.$store.dispatch("getTeammates").then(result => {
-					this.itemsList = result;
-					this.loaded = true;
-				});
+				// this.$store.dispatch("getTeammates").then(result => {
+				// 	this.itemsList = result;
+				// 	this.loaded = true;
+				// });
+				console.log("this.$store.state.teamMates", this.$store.state);
+				this.itemsList = this.$store.state.teamMates;
+				this.loaded = true;
 			} else if (this.type === "betcategories.team-choice") {
 				this.$store.dispatch("getTeams").then(result => {
 					this.itemsList = result;

@@ -8,18 +8,18 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
-export default {
-	computed: {
-		...mapState({})
-	},
-	methods: {
-		...mapActions(['getPrizePool'])
-	},
-	mounted() {
-		this.getPrizePool(6);
-	}
-};
+	import { mapState, mapActions } from "vuex";
+	export default {
+		computed: {
+			...mapState({})
+		},
+		methods: {
+			...mapActions(["getPrizePool"])
+		},
+		mounted() {
+			this.getPrizePool(6);
+		}
+	};
 </script>
 
 <style lang="scss" scoped></style>

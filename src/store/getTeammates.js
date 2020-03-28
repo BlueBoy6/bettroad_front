@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { getTeammates as getTeam } from '../helpers/betsdata';
+import { getTeammates as getTeam } from "../helpers/betsdata";
 
 export const getTeammates = async function(context) {
 	if (context.state.teamMates) {
@@ -7,7 +7,12 @@ export const getTeammates = async function(context) {
 	}
 	const teammates = await getTeam(context.state.user.token);
 	if (teammates) {
-		context.commit('storeTeammates', teammates);
-		return teammates;
+		context.commit("storeTeammates", teammates);
+		return {
+			statusText: "OK"
+		};
 	}
+	return {
+		statusText: "KO"
+	};
 };
