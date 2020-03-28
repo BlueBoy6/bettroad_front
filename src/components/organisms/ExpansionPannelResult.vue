@@ -8,8 +8,8 @@
 						v-if="bet.result"
 						:class="[colorBackgroundLight, darkText, spaceInside]"
 						>✔️ Résultat :
-						{{ bet.result.name ? bet.result.name : bet.result }}</v-sheet
-					>
+						{{ bet.result.name ? bet.result.name : bet.result }}
+					</v-sheet>
 					<v-sheet v-else :class="[colorBackgroundLight, darkText, spaceInside]"
 						>Aucun résultat renseigné. 😴</v-sheet
 					>
@@ -65,19 +65,16 @@
 		computed: {
 			goodResultOrNotColor: function() {
 				if (this.bet.betsubmited) {
-					if (this.bet.result === this.bet.betsubmited.result) {
+					if (this.bet.success) {
 						return this.colorSuccess;
 					}
-					return colorErrorModal;
+					return this.colorErrorModal;
 				}
 				return this.colorBackgroundDark;
 			},
 			isGoodResult: function() {
-				if (this.bet.betsubmited !== null) {
-					if (this.bet.result === this.bet.betsubmited.result) {
-						return true;
-					}
-					return false;
+				if (this.bet.success) {
+					return true;
 				}
 				return false;
 			}

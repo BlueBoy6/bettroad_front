@@ -19,8 +19,6 @@ export const getPrizePool = async context => {
 		throw "Nous n'avons pas pu récupérer les données des autres joueurs";
 	}
 
-	console.log("fetchBets", fetchBets);
-
 	const globalcashPriceRegister = fetchBets.reduce((acc, curr) => {
 		const gameday = pastGames.find(game => game.id === curr.id);
 		const gamedayBetslist = gameday.betslist;
@@ -125,4 +123,5 @@ export const getPrizePool = async context => {
 		games: globalcashPriceRegister
 	};
 	context.commit("storePrizePool", personnalPrizePool);
+	return { status: "OK" };
 };

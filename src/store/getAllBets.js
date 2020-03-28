@@ -31,6 +31,20 @@ export const getAllBets = async function(context) {
 		// If we found a bet
 		if (betMatchedWithGame.length > 0) {
 			const gameBetsListRebuilt = game.betslist.map((bet, i) => {
+				if (bet.result !== null) {
+					if (typeof bet.result === "object") {
+						return {
+							...bet,
+							success:
+								bet.result.name ===
+								betMatchedWithGame[0].betsSubmited_TEST[i].result.name,
+							betsubmited: {
+								label: betMatchedWithGame[0].betsSubmited_TEST[i].label,
+								result: betMatchedWithGame[0].betsSubmited_TEST[i].result
+							}
+						};
+					}
+				}
 				return {
 					...bet,
 					success:

@@ -1,6 +1,6 @@
 <template>
-	<div class="my-5 prizePool">
-		<p class="display-1 mb-5" :class="[whiteText]">Ta cagnotte</p>
+	<div class="my-5 prizePool" v-if="dataLoaded">
+		<p class="display-1 mb-5" :class="[whiteText]">Montant de tes gains</p>
 		<v-sheet
 			class="prizePool__container"
 			:class="[spaceInside, colorBackgroundLight, darkText]"
@@ -9,6 +9,14 @@
 				<b> {{ prizePool.total }}€ </b>
 			</p>
 		</v-sheet>
+	</div>
+	<div v-else>
+		<v-progress-circular
+			:size="130"
+			:width="7"
+			:color="colorBackgroundLight"
+			indeterminate
+		/>
 	</div>
 </template>
 
@@ -28,7 +36,8 @@
 				colorBackgroundDark,
 				whiteText,
 				darkText,
-				spaceInside
+				spaceInside,
+				dataLoaded: false
 			};
 		},
 		computed: {
@@ -40,7 +49,9 @@
 			...mapActions(["getPrizePool"])
 		},
 		mounted() {
-			this.getPrizePool();
+			this.getPrizePool().then(() => {
+				this.dataLoaded = true;
+			});
 		}
 	};
 </script>
