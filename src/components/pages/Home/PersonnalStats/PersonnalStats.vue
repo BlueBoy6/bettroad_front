@@ -37,43 +37,39 @@
 </template>
 
 <script>
-/* eslint-disable no-console */
-import {
-	colorBackgroundLight,
-	colorBackgroundDark,
-	colorSuccess,
-	whiteText,
-	colorText,
-	darkText,
-	spaceInside
-} from '../../../../style/colors.vars';
-import { mapState } from 'vuex';
-export default {
-	data() {
-		return {
-			colorBackgroundLight,
-			colorBackgroundDark,
-			colorSuccess,
-			whiteText,
-			darkText,
-			colorText,
-			spaceInside
-		};
-	},
-	computed: {
-		...mapState({
-			pgPercent: state =>
-				state.gamedays.pastGames.map(game => game.stats.successPercent),
-			pgDaysNumber: state =>
-				state.gamedays.pastGames.map(game => game.day.dayNumber),
-			pgData: state => state.gamedays.pastGames
-		})
-	},
-	mounted() {
-		// console.log('state : ', this.$store.state)
-		console.log('pastgames : ', this.pgDaysNumber);
-	}
-};
+	/* eslint-disable no-console */
+	import {
+		colorBackgroundLight,
+		colorBackgroundDark,
+		colorSuccess,
+		whiteText,
+		colorText,
+		darkText,
+		spaceInside
+	} from "../../../../style/colors.vars";
+	import { mapState } from "vuex";
+	export default {
+		data() {
+			return {
+				colorBackgroundLight,
+				colorBackgroundDark,
+				colorSuccess,
+				whiteText,
+				darkText,
+				colorText,
+				spaceInside
+			};
+		},
+		computed: {
+			...mapState({
+				pgPercent: state =>
+					state.gamedays.pastGames.map(game => game.stats.successPercent),
+				pgDaysNumber: state =>
+					state.gamedays.pastGames.map(game => game.day.dayNumber),
+				pgData: state => state.gamedays.pastGames
+			})
+		}
+	};
 </script>
 
 <style lang="scss" scoped></style>
