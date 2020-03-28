@@ -52,13 +52,27 @@ export const getBets = async (token, idBetter) => {
 				Authorization: `Bearer ${token}`
 			}
 		});
-		if (getBets.statusText === "OK") {
-			return getBets.data;
-		}
+		return getBets.data;
 	} catch (err) {
 		console.log("error  :", err);
 	}
 };
+
+export const getBetsOfGameDay = async (token, idGameday) => {
+	try {
+		const getBets = await axios({
+			method: "get",
+			url: `${backurl}/bets?gameday.id=${idGameday}`,
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
+		});
+		return getBets.data;
+	} catch (err) {
+		console.log("error  :", err);
+	}
+};
+
 export const postBet = async (token, datas) => {
 	try {
 		const betcall = await axios({
@@ -71,11 +85,7 @@ export const postBet = async (token, datas) => {
 				...datas
 			}
 		});
-		if (betcall.statusText === "OK") {
-			return { status: "OK", data: betcall.data };
-		} else {
-			console.log("ERROR", betcall);
-		}
+		return { status: "OK", data: betcall.data };
 	} catch (err) {
 		console.log("error  :", err);
 	}

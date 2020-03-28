@@ -1,13 +1,15 @@
 /* eslint-disable no-console */
-import Vue from "vue";
-import Vuex from "vuex";
-import { storeBets } from "./storeBets";
-import { postBets } from "./postBetAction";
-import { updateBetNextGame } from "./updateBetNextGame";
-import { getGamedays } from "./getGamedays";
-import { getAllBets } from "./getAllBets";
-import { getTeammates } from "./getTeammates";
-import { getTeams } from "./getTeams";
+import Vue from 'vue';
+import Vuex from 'vuex';
+import { storeBets } from './storeBets';
+import { postBets } from './postBetAction';
+import { updateBetNextGame } from './updateBetNextGame';
+import { getGamedays } from './getGamedays';
+import { getAllBets } from './getAllBets';
+import { getTeammates } from './getTeammates';
+import { getTeams } from './getTeams';
+import { getPrizePool } from './getPrizePool';
+
 Vue.use(Vuex);
 export default new Vuex.Store({
 	state: {
@@ -19,7 +21,8 @@ export default new Vuex.Store({
 		},
 		gamedays: null,
 		bets: null,
-		teamMates: null
+		teamMates: null,
+		prizePool: null
 	},
 	mutations: {
 		login(state, payload) {
@@ -60,6 +63,9 @@ export default new Vuex.Store({
 		storeAllBets(state, payload) {
 			state.bets = payload;
 		},
+		storePrizePool(state, payload) {
+			state.prizePool = payload;
+		},
 		storeBets
 	},
 	actions: {
@@ -68,6 +74,7 @@ export default new Vuex.Store({
 		getGamedays,
 		getAllBets,
 		getTeammates,
-		getTeams
+		getTeams,
+		getPrizePool
 	}
 });

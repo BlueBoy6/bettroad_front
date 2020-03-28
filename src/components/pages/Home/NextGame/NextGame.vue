@@ -61,90 +61,86 @@
 </template>
 
 <script>
-/* eslint-disable no-console */
-import { mapState } from 'vuex';
-import {
-	colorBackgroundLight,
-	colorBackgroundDark,
-	colorErrorModal,
-	colorSuccess,
-	colorBtn,
-	whiteText,
-	darkText,
-	spaceInside
-} from '../../../../style/colors.vars';
+	/* eslint-disable no-console */
+	import { mapState } from "vuex";
+	import {
+		colorBackgroundLight,
+		colorBackgroundDark,
+		colorErrorModal,
+		colorSuccess,
+		colorBtn,
+		whiteText,
+		darkText,
+		spaceInside
+	} from "../../../../style/colors.vars";
 
-import NextGameAlreadyBetted from './NextGameAlreadyBetted.vue';
-import NextGameBettOverlay from './NextGameBettOverlay.vue';
-export default {
-	components: {
-		NextGameAlreadyBetted,
-		NextGameBettOverlay
-	},
-	props: {
-		game: Object
-	},
-	data() {
-		return {
-			//improve error message
-			nextGameOverlay: false,
-			colorBackgroundLight,
-			colorBackgroundDark,
-			colorErrorModal,
-			whiteText,
-			darkText,
-			spaceInside,
-			colorBtn,
-			colorSuccess
-		};
-	},
-	computed: {
-		...mapState({
-			tester: state => state.gamedays?.nextGame?.betslist,
-			nextGameSubmitedBool: state =>
-				state.gamedays?.nextGame?.betslist?.[0]?.betsubmited,
-			nextGameBetsList: state => state.gamedays?.nextGame?.betslist
-		})
-	},
-	mounted() {
-		console.log('nextGameBetsList : ', this.nextGameBetsList);
-		console.log('tester : ', this.tester?.betsubmited);
-	}
-};
+	import NextGameAlreadyBetted from "./NextGameAlreadyBetted.vue";
+	import NextGameBettOverlay from "./NextGameBettOverlay.vue";
+	export default {
+		components: {
+			NextGameAlreadyBetted,
+			NextGameBettOverlay
+		},
+		props: {
+			game: Object
+		},
+		data() {
+			return {
+				//improve error message
+				nextGameOverlay: false,
+				colorBackgroundLight,
+				colorBackgroundDark,
+				colorErrorModal,
+				whiteText,
+				darkText,
+				spaceInside,
+				colorBtn,
+				colorSuccess
+			};
+		},
+		computed: {
+			...mapState({
+				tester: state => state.gamedays?.nextGame?.betslist,
+				nextGameSubmitedBool: state =>
+					state.gamedays?.nextGame?.betslist?.[0]?.betsubmited,
+				nextGameBetsList: state => state.gamedays?.nextGame?.betslist
+			})
+		}
+	};
 </script>
 
 <style lang="scss">
-@import '../../../../style/mixins.scss';
+	@import "../../../../style/mixins.scss";
 
-.bets__submited {
-	p:first-child {
-		border-radius: 4px 4px 0 0;
-	}
-	p:last-child {
-		border: 2px solid #263238;
-		border-top: none;
-		border-radius: 0 0 4px 4px;
-	}
-}
-
-.layer__bets {
-	max-height: 95vh;
-	overflow: scroll;
-	scrollbar-width: thin;
-	::-webkit-scrollbar {
-		width: 5px;
-	}
-	// @include media-min('laptop') {
-	// 	max-height: 95vh;
-	// 	overflow: hidden;
-	// }
-	.v-input {
-		&__slot {
-			margin-bottom: 0;
+	.bets__submited {
+		p:first-child {
+			border-radius: 4px 4px 0 0;
 		}
-		.v-text-field__details {
-			display: none;
+		p:last-child {
+			border: 2px solid #263238;
+			border-top: none;
+			border-radius: 0 0 4px 4px;
 		}
 	}
-}
+
+	.layer__bets {
+		max-height: 95vh;
+		overflow: scroll;
+		scrollbar-width: thin;
+		::-webkit-scrollbar {
+			width: 5px;
+		}
+		// @include media-min('laptop') {
+		// 	max-height: 95vh;
+		// 	overflow: hidden;
+		// }
+		.v-input {
+			&__slot {
+				margin-bottom: 0;
+			}
+			.v-text-field__details {
+				display: none;
+			}
+		}
+	}
 </style>

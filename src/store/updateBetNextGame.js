@@ -35,7 +35,6 @@ export const updateBetNextGame = async function(context, payload) {
 
 	// Commit to store the result
 	if (putBet.status === "OK") {
-		console.log(putBet);
 		const nextGameBetSubmited = putBet.data.betsSubmited_TEST;
 		const rebuiltNextGame = {
 			...context.state.gamedays.nextGame,

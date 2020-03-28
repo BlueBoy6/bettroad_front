@@ -146,6 +146,7 @@
 				try {
 					await this.$store.dispatch("getGamedays");
 					await this.$store.dispatch("getAllBets");
+					await this.$store.dispatch("getTeammates");
 					this.betsController = this.nextgame.betslist.map(bet => {
 						const betValueFormated = {
 							idBet: bet.id,
