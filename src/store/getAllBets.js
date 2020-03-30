@@ -93,30 +93,33 @@ export const getAllBets = async function(context) {
 
 	// fetch next game
 	const nextGame = context.state.gamedays.nextGame;
-	let nextGameWithBet;
-	if (nextGameBet) {
-		nextGameWithBet = {
-			...nextGame,
-			betslist: nextGame.betslist.map((bet, i) => {
-				return {
-					...bet,
-					betsubmited: {
-						label: nextGameBet.betsSubmited_TEST[i].label,
-						result: nextGameBet.betsSubmited_TEST[i].result
-					}
-				};
-			})
-		};
-	} else {
-		nextGameWithBet = {
-			...nextGame,
-			betslist: nextGame.betslist.map(bet => {
-				return {
-					...bet,
-					betsubmited: null
-				};
-			})
-		};
+
+	let nextGameWithBet = [];
+	if (nextGame.length > 0){
+		if (nextGameBet) {
+			nextGameWithBet = {
+				...nextGame,
+				betslist: nextGame.betslist.map((bet, i) => {
+					return {
+						...bet,
+						betsubmited: {
+							label: nextGameBet.betsSubmited_TEST[i].label,
+							result: nextGameBet.betsSubmited_TEST[i].result
+						}
+					};
+				})
+			};
+		} else {
+			nextGameWithBet = {
+				...nextGame,
+				betslist: nextGame.betslist.map(bet => {
+					return {
+						...bet,
+						betsubmited: null
+					};
+				})
+			};
+		}
 	}
 
 	context.commit("storePastGames", pastGamesWithBets);

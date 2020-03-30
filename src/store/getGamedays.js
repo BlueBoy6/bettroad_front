@@ -28,9 +28,10 @@ export const getGamedays = async function(context) {
 			const futureGames = gamesSortedFormated.filter(date => {
 				return moment(date.day.en).isAfter(Date.now()) && date;
 			});
+
 			const storeGames = {
-				nextGame: futureGames[0],
-				futureGames: futureGames.splice(1, futureGames.length),
+				nextGame: futureGames[0] || [],
+				futureGames: futureGames.splice(1, futureGames.length) || [],
 				pastGames: pastGames,
 				allGames: gamesSortedFormated
 			};

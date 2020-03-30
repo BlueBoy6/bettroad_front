@@ -2,22 +2,35 @@
 	<v-container v-if="dataLoaded" class="dashboard">
 		<v-row justify="center">
 			<v-col cols="12" md="8">
-				<NextGame :game="gamedays.nextGame" />
+				<NextGame v-if="_nextgame" :game="_nextgame" />
+				<v-sheet :class="[spaceInside, colorBackgroundLight, darkText]">
+					<p class="title ma-0">P***** c**, y a pas un pari à slaper là ! 🏒</p>
+				</v-sheet>
 				<PrizePool />
 				<PersonnalStats />
 				<PastGames :games="gamedays.pastGames" />
 			</v-col>
 		</v-row>
 	</v-container>
+
 	<v-container v-else>
 		<v-row>
-			<v-col cols="8" offset="2" class="loading" align="center">
+			<v-col v-if="!dataError" cols="8" offset="2" class="loading" align="center">
 				<v-progress-circular
 					:size="130"
 					:width="7"
 					:color="colorBackgroundLight"
 					indeterminate
 				/>
+			</v-col>
+			<v-col v-else cols="8" offset="2" class="loading" align="center">
+				<v-alert
+					v-model="dataError.status"
+					close-text="Close Alert"
+					:class="colorErrorModal"
+					dark
+					>{{ dataError.message }}</v-alert
+				>
 			</v-col>
 		</v-row>
 	</v-container>
@@ -28,6 +41,7 @@
 	import {
 		colorBackgroundLight,
 		colorBackgroundDark,
+		colorErrorModal,
 		whiteText,
 		darkText,
 		spaceInside
@@ -48,9 +62,11 @@
 		data() {
 			return {
 				dataLoaded: false,
+				dataError: {status: false},
 				gamedays: null,
 				colorBackgroundLight,
 				colorBackgroundDark,
+				colorErrorModal,
 				whiteText,
 				darkText,
 				spaceInside
@@ -76,12 +92,13 @@
 			initApp: async function() {
 				if (this.$store.state.gamedays === null) {
 					try {
-						await this.$store.dispatch("getGamedays");
+						await this.$store.dispatch("getGamedays").then(result => console.log('getgamedays : ', result));
 						await this.$store.dispatch("getAllBets");
 						await this.$store.dispatch("getTeammates");
 						this.gamedays = this.$store.state.gamedays;
 						this.dataLoaded = true;
 					} catch (err) {
+						this.dataError = {status: true, message: "Hey ! il y a un petit problème de démarage, de l'application, l'équipe bosse certainement déjà dessus ! 🏒"}
 						throw `Petit problème dans l'initialisation de l'application`;
 					}
 				}
