@@ -2,23 +2,28 @@ import { getBetsOfGameDay } from "../../helpers/betsdata";
 
 export default {
     state: {
-        prizePool: null
+        total: null,
+        games: null,
     },
     mutations: {
-        storePrizePool(state, payload) {
-			state.prizePool = payload;
+        storePrizePoolTotal(state, payload) {
+			state.total = payload;
+		},
+        storePrizePoolGames(state, payload) {
+			state.games = payload;
 		},
     },
     actions: {
-        async getPrizePool(context) {
-            const pastGames = context.state.gamedays.pastGames;
+        // eslint-disable-next-line no-unused-vars
+        async getPrizePool({state, commit, rootState }) {
+            const pastGames = rootState.gamedays.pastGames;
         
             let fetchBets = [];
             try {
                 for (let i = 0; i < pastGames.length; i++) {
                     const numberGameId = pastGames[i].id;
                     const betsGame = await getBetsOfGameDay(
-                        context.state.user.token,
+                        rootState.user.token,
                         numberGameId
                     );
                     fetchBets.push({ id: numberGameId, bets: betsGame });
@@ -56,7 +61,7 @@ export default {
                                 }
                             );
                             // let's save the bet of player
-                            if (betPlayer.userName === context.state.user.name) {
+                            if (betPlayer.userName === rootState.user.name) {
                                 const ownbet = {
                                     ...betPlayer,
                                     betsSubmited_TEST: betsSubmitedRebuilt
@@ -130,7 +135,8 @@ export default {
                 total: totalCashPricer.toFixed(2),
                 games: globalcashPriceRegister
             };
-            context.commit("storePrizePool", personnalPrizePool);
+            commit("storePrizePoolTotal", personnalPrizePool.total);
+            commit("storePrizePoolGames", personnalPrizePool.games);
             return { status: "OK" };
         }
     },
