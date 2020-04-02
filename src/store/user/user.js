@@ -1,11 +1,9 @@
 export default {
     state: {
-        user: {
-            id: localStorage.userId ? localStorage.userId : null,
-            name: localStorage.userName || null,
-            role: null,
-            token: localStorage.userToken || null
-        },
+        id: localStorage.userId ? localStorage.userId : null,
+        name: localStorage.userName || null,
+        role: null,
+        token: localStorage.userToken || null
     },
     mutations: {
         login(state, payload) {

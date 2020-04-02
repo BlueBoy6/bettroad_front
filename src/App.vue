@@ -37,6 +37,8 @@ export default {
   },
   computed: {
     userConnected: function() {
+      // eslint-disable-next-line no-console
+      console.log('this.state', this.$store.state);
       if (this.$store.state.user.id === null) {
         return false;
       }

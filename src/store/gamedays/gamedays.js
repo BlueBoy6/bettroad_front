@@ -6,25 +6,32 @@ import momentfr from "../../helpers/momentfr";
 
 export default {
     state: {
-        gamedays: null,
+        gamesLoaded: false,
+        nextGame: null,
+        futureGames: null,
+        pastGames: null,
+        allGames: null
     },
-    mutation: {
-        storeGamedays(state, payload) {
-			state.gamedays = payload;
+    mutations: {
+        storeAllGames(state, payload) {
+			state.allGames = payload
         },
         storeNextGame(state, payload) {
-			state.gamedays.nextGame = payload;
+			state.nextGame = payload;
+		},
+        storeFutureGames(state, payload) {
+			state.futureGames = payload;
 		},
 		storePastGames(state, payload) {
-			state.gamedays.pastGames = payload;
+			state.pastGames = payload;
 		},
     },
     actions:{
-        async getGamedays(context) {
+        // eslint-disable-next-line no-unused-vars
+        async getGamedays({state, commit, rootState }) {
             momentfr;
-            console.log('context : ',context)
             try {
-                const games = await getCalendar(context.state.user.token);
+                const games = await getCalendar(rootState.user.token);
                 if (games) {
                     const gamesSortedFormated = games
                         .sort((a, b) => Date.parse(b.day) - Date.parse(a.day))
@@ -52,8 +59,11 @@ export default {
                         pastGames: pastGames,
                         allGames: gamesSortedFormated
                     };
-                    console.log('context : ',context)
-                    context.commit("storeGamedays", storeGames);
+
+                    commit("storeAllGames", storeGames.allGames);
+                    commit("storePastGames", storeGames.pastGames);
+                    commit("storeNextGame", storeGames.nextGame);
+                    commit("storeNextGame", storeGames.futureGames);
                     return { statusText: "OK" };
                 }
             } catch (err) {

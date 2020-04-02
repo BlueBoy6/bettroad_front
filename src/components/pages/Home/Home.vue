@@ -8,7 +8,7 @@
 				</v-sheet>
 				<PrizePool />
 				<PersonnalStats />
-				<PastGames :games="gamedays.pastGames" />
+				<PastGames v-if="_pastgames" :games="_pastgames" />
 			</v-col>
 		</v-row>
 	</v-container>
@@ -73,6 +73,7 @@
 			};
 		},
 		mounted: async function() {
+			console.log('this.$store from home : ', this.$store)
 			const token = this.$store.state.user.token;
 			if (token === null) {
 				return this.$router.push({
@@ -83,6 +84,7 @@
 		},
 		computed: {
 			...mapState({
+				_games: state => state.gamedays,
 				_nextgame: state => state.NextGame,
 				_pastgames: state => state.pastGames
 			})
@@ -90,11 +92,12 @@
 
 		methods: {
 			initApp: async function() {
-				if (this.$store.state.gamedays === null) {
+				if (this._games.gamesLoaded === false) {
 					try {
 						await this.$store.dispatch("getGamedays").then(result => console.log('getgamedays : ', result));
 						await this.$store.dispatch("getAllBets");
 						await this.$store.dispatch("getTeammates");
+						console.log('the store : ', this.$store.state)
 						this.gamedays = this.$store.state.gamedays;
 						this.dataLoaded = true;
 					} catch (err) {
