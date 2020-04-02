@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { getBets } from "../helpers/betsdata";
+import { getBets } from "../../helpers/betsdata";
 
 export const getAllBets = async function(context) {
 	const allBets = await getBets(

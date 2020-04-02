@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { postBet } from "../helpers/betsdata";
+import { postBet } from "../../helpers/betsdata";
 export const postBets = async function(context, payload) {
 	const dataBets = payload.bets;
 	const gamedayDate = payload.gamedayId;
