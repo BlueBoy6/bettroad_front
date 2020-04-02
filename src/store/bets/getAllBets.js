@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 import { getBets } from "../../helpers/betsdata";
 
-export const getAllBets = async function(context) {
+export const getAllBets = async function({state, commit, rootState }) {
 	const allBets = await getBets(
-		context.state.user.token,
-		context.state.user.id
+		rootState.user.token,
+		rootState.user.id
 	);
 
 	// init next game
@@ -12,14 +12,14 @@ export const getAllBets = async function(context) {
 
 	// catch bet who who's next game
 	const allbetsWithoutNextGame = allBets.map(bet => {
-		if (bet.gameday.id === context.state.gamedays.nextGame.id) {
+		if (bet.gameday.id === rootState.gamedays.nextGame.id) {
 			nextGameBet = bet;
 		}
 		return bet;
 	});
 
 	// fetch past games
-	const pastGames = context.state.gamedays.pastGames;
+	const pastGames = rootState.gamedays.pastGames;
 
 	// rebuilder function to inject results
 	const pastGamesWithBets = pastGames.map(game => {
@@ -92,7 +92,7 @@ export const getAllBets = async function(context) {
 	});
 
 	// fetch next game
-	const nextGame = context.state.gamedays.nextGame;
+	const nextGame = rootState.gamedays.nextGame;
 
 	let nextGameWithBet = [];
 	if (nextGame.length > 0){
@@ -122,9 +122,9 @@ export const getAllBets = async function(context) {
 		}
 	}
 
-	context.commit("storePastGames", pastGamesWithBets);
-	context.commit("storeAllBets", allBets);
-	context.commit("storeNextGame", nextGameWithBet);
+	commit("storePastGames", pastGamesWithBets);
+	commit("storeAllBets", allBets);
+	commit("storeNextGame", nextGameWithBet);
 
 	// return a dispatch if bets was found
 	if (allBets)

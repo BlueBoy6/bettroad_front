@@ -6,7 +6,6 @@ export default {
         bets: null,
     },
     mutations:{
-        
         storeAllBets(state, payload) {
 			state.bets = payload;
 		},
