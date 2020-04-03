@@ -1,21 +1,21 @@
 import { getTeammates as getTeam } from "../../helpers/betsdata";
 export default {
     state: {
-        teamMates: null,
+        players: []
     },
     mutations:{
         storeTeammates(state, payload) {
-			state.teamMates = payload;
+			state.players = payload;
 		},
     },
     actions:{
-         async getTeammates(context) {
-            if (context.state.teamMates) {
-                return context.state.teamMates;
+         async getTeammates({state, commit, rootState }) {
+            if (state.teamMates) {
+                return state.teamMates;
             }
-            const teammates = await getTeam(context.state.user.token);
+            const teammates = await getTeam(rootState.user.token);
             if (teammates) {
-                context.commit("storeTeammates", teammates);
+                commit("storeTeammates", teammates);
                 return {
                     statusText: "OK"
                 };

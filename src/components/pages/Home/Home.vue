@@ -85,8 +85,8 @@
 		computed: {
 			...mapState({
 				_games: state => state.gamedays,
-				_nextgame: state => state.NextGame,
-				_pastgames: state => state.pastGames
+				_nextgame: state => state.gamedays.NextGame,
+				_pastgames: state => state.gamedays.pastGames
 			})
 		},
 
@@ -94,16 +94,25 @@
 			initApp: async function() {
 				if (this._games.gamesLoaded === false) {
 					try {
-						await this.$store.dispatch("getGamedays").then(result => console.log('getgamedays : ', result));
-						await this.$store.dispatch("getAllBets");
-						await this.$store.dispatch("getTeammates");
-						console.log('the store : ', this.$store.state)
-						this.gamedays = this.$store.state.gamedays;
-						this.dataLoaded = true;
+						await this.$store.dispatch("getGamedays").then(() => console.log('getgamedays : ', this.$store.state));
 					} catch (err) {
 						this.dataError = {status: true, message: "Hey ! il y a un petit problème de démarage, de l'application, l'équipe bosse certainement déjà dessus ! 🏒"}
-						throw `Petit problème dans l'initialisation de l'application`;
+						throw `Petit problème dans la récupération des journées de matchs`;
 					}
+					try {
+						await this.$store.dispatch("getAllBets").then(() => console.log('getAllBets : ', this.$store.state));
+					} catch (err) {
+						this.dataError = {status: true, message: "Hey ! il y a un petit problème de démarage, de l'application, l'équipe bosse certainement déjà dessus ! 🏒"}
+						throw `Petit problème dans la récupération des paris soumis`;
+					}
+					try {
+						await this.$store.dispatch("getTeammates").then(() => console.log('getTeammates : ', this.$store.state));
+					} catch (err) {
+						this.dataError = {status: true, message: "Hey ! il y a un petit problème de démarage, de l'application, l'équipe bosse certainement déjà dessus ! 🏒"}
+						throw `Petit problème dans la récupération des teammates`;
+					}
+						this.gamedays = this.$store.state.gamedays;
+						this.dataLoaded = true;
 				}
 				this.gamedays = this.$store.state.gamedays;
 				this.dataLoaded = true;
