@@ -17,7 +17,8 @@
     >
       <v-row class="mx-0">
         <v-col class="px-10">
-          <p class="mb-5 title">{{ this.$store.state.user.name}}</p>
+          <p class="mb-0 subtitle-1">{{ this.$store.state.user.team.name}}</p>
+          <p class="mb-5 headline"><b>{{ this.$store.state.user.name.toUpperCase()}}</b></p>
           <v-btn width="100%" :class="colorInputs" @click="disconnect">Deconnexion</v-btn>
         </v-col>
       </v-row>
@@ -49,11 +50,14 @@ export default {
     },
     disconnect: function() {
       this.openMenu = false;
-      this.$store.commit("logout");
-      localStorage.clear();
-      this.$router.push({
-        path: "/"
-      });
+      try{
+        this.$store.dispatch("logout");
+        this.$router.push({
+          path: "/"
+        });
+      }catch(err){
+        throw `Un problème est arrivé lors de la déconnexion ${err}`
+      }
     }
   }
 };

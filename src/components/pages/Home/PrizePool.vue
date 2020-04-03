@@ -1,3 +1,4 @@
+
 <template>
 	<div class="my-5 prizePool" v-if="dataLoaded">
 		<p class="display-1 mb-5" :class="[whiteText]">Montant de tes gains</p>
@@ -21,6 +22,7 @@
 </template>
 
 <script>
+	/* eslint-disable no-console */
 	import { mapState, mapActions } from "vuex";
 	import {
 		colorBackgroundLight,
@@ -42,16 +44,19 @@
 		},
 		computed: {
 			...mapState({
-				prizePool: state => state.prizePool
+				prizePool: state => state.prizepool
 			})
 		},
 		methods: {
 			...mapActions(["getPrizePool"])
 		},
-		mounted() {
-			this.getPrizePool().then(() => {
+		async mounted() {
+			try {
+				await this.getPrizePool()
 				this.dataLoaded = true;
-			});
+			} catch (err) {
+				throw `Problème dans la récupération du prizepool : ${err}`
+			}
 		}
 	};
 </script>

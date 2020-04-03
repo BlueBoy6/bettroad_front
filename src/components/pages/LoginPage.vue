@@ -65,7 +65,7 @@
 		colorBackgroundDark,
 		colorErrorModal
 	} from "../../style/colors.vars";
-	import { loginConnect } from "../../helpers/login";
+	
 	export default {
 		data() {
 			return {
@@ -90,16 +90,14 @@
 			},
 			connect: async function() {
 				this.waitForLog = true;
-				const connection = await loginConnect(this.login, this.password);
-				if (connection.status === "OK") {
-					this.$store.commit("login", connection.user);
+				this.$store.dispatch("login",{login: this.login, password: this.password}).then(() => {
 					this.$router.push({
 						path: "/dashboard"
 					});
-				} else {
+				}).catch(() =>{
 					this.waitForLog = false;
 					this.error.status = true;
-				}
+				});
 			}
 		},
 		mounted() {
