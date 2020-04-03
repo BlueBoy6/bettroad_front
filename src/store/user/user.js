@@ -12,7 +12,7 @@ export default {
     },
     mutations: {
         loginSaved(state, payload) {
-			console.log('login', payload)
+
 			state.id = payload.id;
 			state.name = payload.name;
 			state.role = payload.role;
@@ -29,10 +29,8 @@ export default {
 	},
 	actions: {
 		async login({state, commit, rootState }, payload) {
-			console.log('payload', payload)
 			try{
 				const connect = await loginConnect(payload.login, payload.password);
-				console.log('coco', connect)
 				commit('loginSaved', connect.user)
 				return {status: 'OK'}
 			} catch (err){

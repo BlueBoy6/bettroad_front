@@ -73,7 +73,6 @@
 			};
 		},
 		mounted: async function() {
-			console.log('this.$store from home : ', this.$store)
 			const token = this.$store.state.user.token;
 			if (token === null) {
 				return this.$router.push({
@@ -94,19 +93,19 @@
 			initApp: async function() {
 				if (this._games.gamesLoaded === false) {
 					try {
-						await this.$store.dispatch("getGamedays").then(() => console.log('getgamedays : ', this.$store.state));
+						await this.$store.dispatch("getGamedays")
 					} catch (err) {
 						this.dataError = {status: true, message: "Hey ! il y a un petit problème de démarage, de l'application, l'équipe bosse certainement déjà dessus ! 🏒"}
 						throw `Petit problème dans la récupération des journées de matchs`;
 					}
 					try {
-						await this.$store.dispatch("getAllBets").then(() => console.log('getAllBets : ', this.$store.state));
+						await this.$store.dispatch("getAllBets")
 					} catch (err) {
 						this.dataError = {status: true, message: "Hey ! il y a un petit problème de démarage, de l'application, l'équipe bosse certainement déjà dessus ! 🏒"}
 						throw `Petit problème dans la récupération des paris soumis`;
 					}
 					try {
-						await this.$store.dispatch("getTeammates").then(() => console.log('getTeammates : ', this.$store.state));
+						await this.$store.dispatch("getTeammates")
 					} catch (err) {
 						this.dataError = {status: true, message: "Hey ! il y a un petit problème de démarage, de l'application, l'équipe bosse certainement déjà dessus ! 🏒"}
 						throw `Petit problème dans la récupération des teammates`;

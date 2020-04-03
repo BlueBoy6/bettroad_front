@@ -9,7 +9,6 @@ export const loginConnect = (login, password) => {
 			password: password
 		})
 		.then(result => {
-			console.log('result : ', result)
 			const token = {
 				status: 'OK',
 				user: {
