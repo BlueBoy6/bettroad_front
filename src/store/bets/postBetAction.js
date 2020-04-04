@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
-import { postBet } from "../../helpers/betsdata";
-export const postBets = async function(context, payload) {
+import { postBet } from '../../helpers/betsdata';
+export const postBets = async function({ commit, rootState }, payload) {
 	const dataBets = payload.bets;
 	const gamedayDate = payload.gamedayId;
 
 	const postFormat = {
-		user: context.state.user.id,
-		userName: context.state.user.name,
+		user: rootState.user.id,
+		userName: rootState.user.name,
 		gameday: gamedayDate,
 		betsSubmited_TEST: dataBets.map(v => {
 			// check if is Object
@@ -15,13 +15,12 @@ export const postBets = async function(context, payload) {
 		})
 	};
 
-	const postAction = await postBet(context.state.user.token, postFormat);
-
-	if (postAction.status === "OK") {
+	try {
+		const postAction = await postBet(rootState.user.token, postFormat);
 		const nextGameBetSubmited = postAction.data.betsSubmited_TEST;
 		const rebuiltNextGame = {
-			...context.state.gamedays.nextGame,
-			betslist: context.state.gamedays.nextGame.betslist.map((bet, i) => {
+			...rootState.gamedays.nextGame,
+			betslist: rootState.gamedays.nextGame.betslist.map((bet, i) => {
 				return {
 					...bet,
 					betsubmited: {
@@ -31,7 +30,9 @@ export const postBets = async function(context, payload) {
 				};
 			})
 		};
-		context.commit("storeNextGame", rebuiltNextGame);
+		commit('storeNextGame', rebuiltNextGame);
 		return rebuiltNextGame;
+	} catch (err) {
+		throw `nous ne sommes pas arrivé à soumettre ton paris. ${err}`;
 	}
 };

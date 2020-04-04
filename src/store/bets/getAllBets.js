@@ -1,11 +1,8 @@
 /* eslint-disable no-console */
-import { getBets } from "../../helpers/betsdata";
+import { getBets } from '../../helpers/betsdata';
 
-export const getAllBets = async function({state, commit, rootState }) {
-	const allBets = await getBets(
-		rootState.user.token,
-		rootState.user.id
-	);
+export const getAllBets = async function({ commit, rootState }) {
+	const allBets = await getBets(rootState.user.token, rootState.user.id);
 
 	// init next game
 	let nextGameBet;
@@ -32,7 +29,7 @@ export const getAllBets = async function({state, commit, rootState }) {
 		if (betMatchedWithGame.length > 0) {
 			const gameBetsListRebuilt = game.betslist.map((bet, i) => {
 				if (bet.result !== null) {
-					if (typeof bet.result === "object") {
+					if (typeof bet.result === 'object') {
 						return {
 							...bet,
 							success:
@@ -40,7 +37,8 @@ export const getAllBets = async function({state, commit, rootState }) {
 								betMatchedWithGame[0].betsSubmited_TEST[i].result.name,
 							betsubmited: {
 								label: betMatchedWithGame[0].betsSubmited_TEST[i].label,
-								result: betMatchedWithGame[0].betsSubmited_TEST[i].result
+								result:
+									betMatchedWithGame[0].betsSubmited_TEST[i].result
 							}
 						};
 					}
@@ -48,7 +46,8 @@ export const getAllBets = async function({state, commit, rootState }) {
 				return {
 					...bet,
 					success:
-						bet.result === betMatchedWithGame[0].betsSubmited_TEST[i].result,
+						bet.result ===
+						betMatchedWithGame[0].betsSubmited_TEST[i].result,
 					betsubmited: {
 						label: betMatchedWithGame[0].betsSubmited_TEST[i].label,
 						result: betMatchedWithGame[0].betsSubmited_TEST[i].result
@@ -65,7 +64,8 @@ export const getAllBets = async function({state, commit, rootState }) {
 			for (let i = 0; i < gameRebuilt.betslist.length; i++) {
 				gameRebuilt.betslist[i].success && successNbr++;
 			}
-			const successPercent = (successNbr / gameRebuilt.betslist.length) * 100;
+			const successPercent =
+				(successNbr / gameRebuilt.betslist.length) * 100;
 			const stats = {
 				successPercent: successPercent,
 				numberOfSuccess: successNbr,
@@ -95,7 +95,7 @@ export const getAllBets = async function({state, commit, rootState }) {
 	const nextGame = rootState.gamedays.nextGame;
 
 	let nextGameWithBet = [];
-	if (nextGame.length > 0){
+	if (nextGame.length > 0) {
 		if (nextGameBet) {
 			nextGameWithBet = {
 				...nextGame,
@@ -122,15 +122,15 @@ export const getAllBets = async function({state, commit, rootState }) {
 		}
 	}
 
-	commit("storePastGames", pastGamesWithBets);
-	commit("storeAllBets", allBets);
-	commit("storeNextGame", nextGameWithBet);
+	commit('storePastGames', pastGamesWithBets);
+	commit('storeAllBets', allBets);
+	commit('storeNextGame', nextGameWithBet);
 
 	// return a dispatch if bets was found
 	if (allBets)
 		return {
-			statusText: "OK"
+			statusText: 'OK'
 		};
 	// return a dispatch if no bets was found
-	return { statusText: "KO" };
+	return { statusText: 'KO' };
 };
