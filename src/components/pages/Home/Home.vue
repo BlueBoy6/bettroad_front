@@ -3,8 +3,13 @@
 		<v-row justify="center">
 			<v-col cols="12" md="8">
 				<NextGame v-if="_nextgame" :game="_nextgame" />
-				<v-sheet :class="[spaceInside, colorBackgroundLight, darkText]">
-					<p class="title ma-0">P***** c**, y a pas un pari à slaper là ! 🏒</p>
+				<v-sheet
+					v-else
+					:class="[spaceInside, colorBackgroundLight, darkText]"
+				>
+					<p class="title ma-0">
+						P***** c**, y a pas un pari à slaper là ! 🏒
+					</p>
 				</v-sheet>
 				<PrizePool />
 				<PersonnalStats />
@@ -15,7 +20,13 @@
 
 	<v-container v-else>
 		<v-row>
-			<v-col v-if="!dataError" cols="8" offset="2" class="loading" align="center">
+			<v-col
+				v-if="!dataError"
+				cols="8"
+				offset="2"
+				class="loading"
+				align="center"
+			>
 				<v-progress-circular
 					:size="130"
 					:width="7"
@@ -37,113 +48,125 @@
 </template>
 
 <script>
-	/* eslint-disable no-console */
-	import {
-		colorBackgroundLight,
-		colorBackgroundDark,
-		colorErrorModal,
-		whiteText,
-		darkText,
-		spaceInside
-	} from "../../../style/colors.vars";
-	import { mapState } from "vuex";
-	import NextGame from "./NextGame/NextGame";
-	import PastGames from "./PastGames";
-	import PersonnalStats from "./PersonnalStats/PersonnalStats";
-	import PrizePool from "./PrizePool";
+/* eslint-disable no-console */
+import {
+	colorBackgroundLight,
+	colorBackgroundDark,
+	colorErrorModal,
+	whiteText,
+	darkText,
+	spaceInside,
+} from '../../../style/colors.vars';
+import { mapState } from 'vuex';
+import NextGame from './NextGame/NextGame';
+import PastGames from './PastGames';
+import PersonnalStats from './PersonnalStats/PersonnalStats';
+import PrizePool from './PrizePool';
 
-	export default {
-		components: {
-			PastGames,
-			NextGame,
-			PersonnalStats,
-			PrizePool
-		},
-		data() {
-			return {
-				dataLoaded: false,
-				dataError: {status: false},
-				gamedays: null,
-				colorBackgroundLight,
-				colorBackgroundDark,
-				colorErrorModal,
-				whiteText,
-				darkText,
-				spaceInside
-			};
-		},
-		mounted: async function() {
-			const token = this.$store.state.user.token;
-			if (token === null) {
-				return this.$router.push({
-					path: "/"
-				});
-			}
-			this.initApp();
-		},
-		computed: {
-			...mapState({
-				_games: state => state.gamedays,
-				_nextgame: state => state.gamedays.NextGame,
-				_pastgames: state => state.gamedays.pastGames
-			})
-		},
+export default {
+	components: {
+		PastGames,
+		NextGame,
+		PersonnalStats,
+		PrizePool,
+	},
+	data() {
+		return {
+			dataLoaded: false,
+			dataError: { status: false },
+			gamedays: null,
+			colorBackgroundLight,
+			colorBackgroundDark,
+			colorErrorModal,
+			whiteText,
+			darkText,
+			spaceInside,
+		};
+	},
+	mounted: async function () {
+		const token = this.$store.state.user.token;
+		if (token === null) {
+			return this.$router.push({
+				path: '/',
+			});
+		}
+		this.initApp();
+	},
+	computed: {
+		...mapState({
+			_games: (state) => state.gamedays,
+			_nextgame: (state) => state.gamedays.nextGame,
+			_pastgames: (state) => state.gamedays.pastGames,
+		}),
+	},
 
-		methods: {
-			initApp: async function() {
-				if (this._games.gamesLoaded === false) {
-					try {
-						await this.$store.dispatch("getGamedays")
-					} catch (err) {
-						this.dataError = {status: true, message: "Hey ! il y a un petit problème de démarage, de l'application, l'équipe bosse certainement déjà dessus ! 🏒"}
-						throw `Petit problème dans la récupération des journées de matchs`;
-					}
-					try {
-						await this.$store.dispatch("getAllBets")
-					} catch (err) {
-						this.dataError = {status: true, message: "Hey ! il y a un petit problème de démarage, de l'application, l'équipe bosse certainement déjà dessus ! 🏒"}
-						throw `Petit problème dans la récupération des paris soumis`;
-					}
-					try {
-						await this.$store.dispatch("getTeammates")
-					} catch (err) {
-						this.dataError = {status: true, message: "Hey ! il y a un petit problème de démarage, de l'application, l'équipe bosse certainement déjà dessus ! 🏒"}
-						throw `Petit problème dans la récupération des teammates`;
-					}
-						this.gamedays = this.$store.state.gamedays;
-						this.dataLoaded = true;
+	methods: {
+		initApp: async function () {
+			if (this._games.gamesLoaded === false) {
+				try {
+					await this.$store.dispatch('getGamedays');
+				} catch (err) {
+					this.dataError = {
+						status: true,
+						message:
+							"Hey ! il y a un petit problème de démarage, de l'application, l'équipe bosse certainement déjà dessus ! 🏒",
+					};
+					throw `Petit problème dans la récupération des journées de matchs`;
 				}
-				this.gamedays = this.$store.state.gamedays;
+				try {
+					await this.$store.dispatch('getAllBets');
+				} catch (err) {
+					this.dataError = {
+						status: true,
+						message:
+							"Hey ! il y a un petit problème de démarage, de l'application, l'équipe bosse certainement déjà dessus ! 🏒",
+					};
+					throw `Petit problème dans la récupération des paris soumis`;
+				}
+				try {
+					await this.$store.dispatch('getTeammates');
+				} catch (err) {
+					this.dataError = {
+						status: true,
+						message:
+							"Hey ! il y a un petit problème de démarage, de l'application, l'équipe bosse certainement déjà dessus ! 🏒",
+					};
+					throw `Petit problème dans la récupération des teammates`;
+				}
 				this.dataLoaded = true;
 			}
-		}
-	};
+			if (this._games.gamesLoaded) {
+				this.dataLoaded = true;
+			}
+		},
+	},
+};
 </script>
 
 <style lang="scss">
-	// $card-adjacent-sibling-text-padding-top: 45px;
-	.container.dashboard {
-		min-height: calc(100% - 60px);
-		& > .row {
-			min-height: 100%;
-			.col.loading {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-			}
+// $card-adjacent-sibling-text-padding-top: 45px;
+.container.dashboard {
+	min-height: calc(100% - 60px);
+	& > .row {
+		min-height: 100%;
+		.col.loading {
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
 	}
-	.v-card {
-		.event__card {
-			border-radius: 6px;
-			text-align: left;
-			p.headline {
-				margin-bottom: 0px;
-			}
-			.bets__available {
-				width: 100%;
-				border-radius: 4px;
-			}
+}
+.v-card {
+	.event__card {
+		border-radius: 6px;
+		text-align: left;
+		p.headline {
+			margin-bottom: 0px;
+		}
+		.bets__available {
+			width: 100%;
+			border-radius: 4px;
 		}
 	}
+}
 </style>

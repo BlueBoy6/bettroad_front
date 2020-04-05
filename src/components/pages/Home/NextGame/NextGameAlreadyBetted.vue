@@ -8,7 +8,10 @@
 				v-for="betted in nextGameBetted"
 				class="bets__submited mt-2"
 			>
-				<p class="pa-2 ma-0 body-2" :class="[colorBackgroundDark, whiteText]">
+				<p
+					class="pa-2 ma-0 body-2"
+					:class="[colorBackgroundDark, whiteText]"
+				>
 					{{ betted.label }}
 				</p>
 				<p
@@ -29,44 +32,46 @@
 				</p>
 			</div>
 			<v-btn class="mt-6" large to="/nextgame-modifier">
-				<v-icon small dark class="mr-2">mdi-pencil</v-icon> Modifier mon pari
+				<v-icon small dark class="mr-2">mdi-pencil</v-icon> Modifier mon
+				pari
 			</v-btn>
 		</v-col>
 	</v-row>
 </template>
 
 <script>
-	import {
-		colorBackgroundLight,
-		colorBackgroundDark,
-		colorErrorModal,
-		colorSuccess,
-		colorBtn,
-		whiteText,
-		darkText,
-		spaceInside
-	} from "../../../../style/colors.vars";
+/* eslint-disable no-console */
+import {
+	colorBackgroundLight,
+	colorBackgroundDark,
+	colorErrorModal,
+	colorSuccess,
+	colorBtn,
+	whiteText,
+	darkText,
+	spaceInside,
+} from '../../../../style/colors.vars';
 
-	export default {
-		data() {
-			return {
-				colorBackgroundLight,
-				colorBackgroundDark,
-				colorErrorModal,
-				whiteText,
-				darkText,
-				spaceInside,
-				colorBtn,
-				colorSuccess
-			};
+export default {
+	data() {
+		return {
+			colorBackgroundLight,
+			colorBackgroundDark,
+			colorErrorModal,
+			whiteText,
+			darkText,
+			spaceInside,
+			colorBtn,
+			colorSuccess,
+		};
+	},
+	props: {
+		nextGameBetted: {
+			type: Array,
+			required: true,
 		},
-		props: {
-			nextGameBetted: {
-				type: Array,
-				required: true
-			}
-		}
-	};
+	},
+};
 </script>
 
 <style lang="scss" scoped></style>
