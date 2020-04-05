@@ -71,9 +71,6 @@ export default {
 			required: true,
 		},
 	},
-	mounted() {
-		console.log('chit', this.nextGameBetted);
-	},
 };
 </script>
 

@@ -15,7 +15,7 @@
 					expanded
 					:type="bet.__component"
 					:defaultValue="bet.betsubmited.result"
-					@input="e => changeValueBet(e, bet.id, bet.label)"
+					@input="(e) => changeValueBet(e, bet.id, bet.label)"
 				/>
 			</div>
 			<div class="NGBetModifierPage__submit mt-5">
@@ -56,119 +56,122 @@
 </template>
 
 <script>
-	/* eslint-disable no-console */
-	import {
-		colorBackgroundLight,
-		colorBackgroundDark,
-		colorErrorModal,
-		whiteText,
-		colorSuccess,
-		darkText
-	} from "@/style/colors.vars";
-	import BetsSwitch from "@/components/atoms/betsSwitch";
-	import { mapState } from "vuex";
-	export default {
-		components: {
-			BetsSwitch
-		},
-		data() {
-			return {
-				colorBackgroundLight,
-				colorSuccess,
-				colorBackgroundDark,
-				colorErrorModal,
-				darkText,
-				whiteText,
-				dataLoaded: false,
-				error: { status: false, message: "" },
-				betsController: []
-			};
-		},
-		computed: {
-			...mapState({
-				nextgame: state => state.gamedays?.nextGame,
-				bets: state => state.bets
-			})
-		},
-		async mounted() {
-			if (!this.nextgame) {
-				this.initApp();
-			} else {
-				this.betsController = this.nextgame.betslist.map(bet => {
-					const betValueFormated = {
-						idBet: bet.id,
-						value: bet.betsubmited.result,
-						type: bet.__component,
-						label: bet.label
-					};
-					return betValueFormated;
-				});
-				this.dataLoaded = true;
-			}
-		},
-		methods: {
-			changeValueBet: function(e, idBet, label) {
+/* eslint-disable no-console */
+import {
+	colorBackgroundLight,
+	colorBackgroundDark,
+	colorErrorModal,
+	whiteText,
+	colorSuccess,
+	darkText,
+} from '@/style/colors.vars';
+import BetsSwitch from '@/components/atoms/betsSwitch';
+import { mapState } from 'vuex';
+export default {
+	components: {
+		BetsSwitch,
+	},
+	data() {
+		return {
+			colorBackgroundLight,
+			colorSuccess,
+			colorBackgroundDark,
+			colorErrorModal,
+			darkText,
+			whiteText,
+			dataLoaded: false,
+			error: { status: false, message: '' },
+			betsController: [],
+		};
+	},
+	computed: {
+		...mapState({
+			nextgame: (state) => state.gamedays?.nextGame,
+			bets: (state) => state.bets.list,
+		}),
+	},
+	async mounted() {
+		if (!this.nextgame) {
+			this.initApp();
+		} else {
+			this.betsController = this.nextgame.betslist.map((bet) => {
 				const betValueFormated = {
-					idBet,
-					value: e.value,
-					type: e.type,
-					label
+					idBet: bet.id,
+					value: bet.betsubmited.result,
+					type: bet.__component,
+					label: bet.label,
 				};
-				const controllerRebuilt = this.betsController.map(bet => {
-					if (bet.idBet === idBet) {
-						return betValueFormated;
-					}
-					return bet;
-				});
-				this.betsController = controllerRebuilt;
-			},
-			submitModification: function() {
-				const betId = this.bets.find(bet => bet.gameday.id === this.nextgame.id)
-					.id;
+				return betValueFormated;
+			});
+			this.dataLoaded = true;
+		}
+	},
+	methods: {
+		changeValueBet: function (e, idBet, label) {
+			const betValueFormated = {
+				idBet,
+				value: e.value,
+				type: e.type,
+				label,
+			};
+			const controllerRebuilt = this.betsController.map((bet) => {
+				if (bet.idBet === idBet) {
+					return betValueFormated;
+				}
+				return bet;
+			});
+			this.betsController = controllerRebuilt;
+		},
+		submitModification: function () {
+			const betId = this.bets.find(
+				(bet) => bet.gameday.id === this.nextgame.id
+			).id;
 
-				const betToSubmit = {
-					betId: betId,
-					gamedayId: this.nextgame.id,
-					bets: this.betsController
-				};
-				this.$store.dispatch("updateBetNextGame", betToSubmit).then(result => {
-					if (result.status === "OK") {
-						return this.$router.push({ path: "/dashboard" });
+			const betToSubmit = {
+				betId: betId,
+				gamedayId: this.nextgame.id,
+				bets: this.betsController,
+			};
+			this.$store
+				.dispatch('updateBetNextGame', betToSubmit)
+				.then((result) => {
+					if (result.status === 'OK') {
+						return this.$router.push({ path: '/dashboard' });
 					}
 					this.error.message = result.message;
 					this.error.status = true;
 				});
-			},
-			backToHome: function() {
-				this.$router.push({ path: "/dashboard" });
-			},
-			initApp: async function() {
-				try {
-					await this.$store.dispatch("getGamedays");
-					await this.$store.dispatch("getAllBets");
-					await this.$store.dispatch("getTeammates");
-					this.betsController = this.nextgame.betslist.map(bet => {
-						const betValueFormated = {
-							idBet: bet.id,
-							value: bet.betsubmited.result,
-							type: bet.__component,
-							label: bet.label
-						};
-						return betValueFormated;
-					});
+		},
+		backToHome: function () {
+			this.$router.push({ path: '/dashboard' });
+		},
+		initApp: async function () {
+			try {
+				await this.$store.dispatch('getGamedays');
+				await this.$store.dispatch('getAllBets');
+				await this.$store.dispatch('getTeammates');
+				this.betsController = this.nextgame.betslist.map((bet) => {
+					const betValueFormated = {
+						idBet: bet.id,
+						value: bet.betsubmited.result,
+						type: bet.__component,
+						label: bet.label,
+					};
+					return betValueFormated;
+				});
 
-					this.dataLoaded = true;
-				} catch (err) {
-					throw "Une erreur rencontré dans la récupération";
-				}
+				this.dataLoaded = true;
+			} catch (err) {
+				throw 'Une erreur rencontré dans la récupération';
 			}
-		}
-	};
+		},
+	},
+};
 </script>
 
 <style lang="scss" scoped>
-	.NGBetModifierPage {
-		&__submit {
-		}
+.NGBetModifierPage {
+	&__submit {
 	}
+}
 </style>

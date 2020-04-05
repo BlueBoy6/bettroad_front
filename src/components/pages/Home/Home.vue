@@ -102,6 +102,7 @@ export default {
 
 	methods: {
 		initApp: async function () {
+			console.log('game loaded : ', this.$store.state);
 			if (this._games.gamesLoaded === false) {
 				try {
 					await this.$store.dispatch('getGamedays');
@@ -135,7 +136,6 @@ export default {
 				}
 				this.dataLoaded = true;
 			}
-			this.dataLoaded = true;
 		},
 	},
 };

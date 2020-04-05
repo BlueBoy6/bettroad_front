@@ -21,8 +21,6 @@ export default {
 			state.gamesLoaded = payload.gamesloaded;
 		},
 		storeNextGame(state, payload) {
-			// console.log('storeNextGame payload :', payload);
-			// console.log('storeNextGame state:', state.nextGame);
 			state.nextGame = payload;
 		},
 		storeFutureGames(state, payload) {
@@ -33,6 +31,13 @@ export default {
 		},
 		storeGamesLoaded(state, payload) {
 			state.gamesLoaded = payload;
+		},
+		clearGamedays(state) {
+			state.gamesLoaded = false;
+			state.allGames = null;
+			state.pastGames = null;
+			state.nextGame = null;
+			state.futureGames = null;
 		},
 	},
 	actions: {

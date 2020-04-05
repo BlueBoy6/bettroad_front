@@ -4,6 +4,7 @@ import { getBets } from '../../helpers/betsdata';
 export const getAllBets = async function ({ commit, rootState }) {
 	const allBets = await getBets(rootState.user.token, rootState.user.id);
 
+	console.log('ça repasse pas par ici ?');
 	// init next game
 	let nextGameBet;
 
@@ -97,7 +98,6 @@ export const getAllBets = async function ({ commit, rootState }) {
 	let nextGameWithBet = [];
 	if (nextGame !== null) {
 		if (nextGameBet) {
-			console.log('nextGameBet', nextGameBet);
 			nextGameWithBet = {
 				...nextGame,
 				betslist: nextGame.betslist.map((bet, i) => {
@@ -122,10 +122,6 @@ export const getAllBets = async function ({ commit, rootState }) {
 			};
 		}
 	}
-
-	console.log('nextGame', nextGame);
-	console.log('nextGameWithBet', nextGameWithBet);
-	console.log('pastGamesWithBets', pastGamesWithBets);
 
 	commit('storePastGames', pastGamesWithBets);
 	commit('storeAllBets', allBets);

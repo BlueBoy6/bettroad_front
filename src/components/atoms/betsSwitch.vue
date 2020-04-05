@@ -147,13 +147,11 @@ export default {
 			} else if (this.type === 'betcategories.yes-no-choice') {
 				infoFilter = e;
 			}
-			console.log('e', e);
 			const emitObj = {
 				idBet: this.idBet,
 				value: infoFilter,
 				type: this.type,
 			};
-			console.log('emit : ', emitObj);
 			this.$emit('input', emitObj);
 		},
 	},
