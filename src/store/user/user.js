@@ -29,22 +29,23 @@ export default {
 		},
 	},
 	actions: {
-		async login({ state, commit, rootState }, payload) {
+		async login({ commit }, payload) {
 			try {
 				const connect = await loginConnect(payload.login, payload.password);
 				commit('loginSaved', connect.user);
 				return { status: 'OK' };
 			} catch (err) {
-				throw `Nous ne sommes pas arrivé à nous connecter à votre compte : ${err}`;
+				throw `Nous ne sommes pas arrivés à nous connecter à votre compte : ${err}`;
 			}
 		},
 		logout({ commit, rootState }) {
 			commit('logoutSaved');
 			commit('clearBets');
 			commit('clearGamedays');
+			commit('clearTeams');
+			commit('clearPrizePool');
 			localStorage.clear();
 			sessionStorage.clear();
-			console.log('rootState', rootState);
 		},
 	},
 };

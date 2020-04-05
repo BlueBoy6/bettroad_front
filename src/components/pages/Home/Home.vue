@@ -102,7 +102,6 @@ export default {
 
 	methods: {
 		initApp: async function () {
-			console.log('game loaded : ', this.$store.state);
 			if (this._games.gamesLoaded === false) {
 				try {
 					await this.$store.dispatch('getGamedays');
@@ -135,6 +134,10 @@ export default {
 					throw `Petit problème dans la récupération des teammates`;
 				}
 				this.dataLoaded = true;
+			}
+			if (this._games.gamesLoaded) {
+				this.dataLoaded = true;
+				console.log('this store :', this.$store.state);
 			}
 		},
 	},

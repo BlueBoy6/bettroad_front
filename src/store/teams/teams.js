@@ -8,6 +8,9 @@ export default {
 		storeTeamschampionship(state, payload) {
 			state.teamsChampionship = payload;
 		},
+		clearTeams(state) {
+			state.teamsChampionship = null;
+		},
 	},
 	actions: {
 		async getTeams({ commit, rootState }) {

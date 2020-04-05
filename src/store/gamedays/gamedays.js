@@ -75,10 +75,6 @@ export default {
 					};
 
 					commit('storeAllGames', storeGames);
-					// commit('storePastGames', storeGames.pastGames);
-					// commit('storeNextGame', storeGames.nextGame);
-					// commit('storeFutureGames', storeGames.futureGames);
-					// commit('storeGamesLoaded', true);
 					return { statusText: 'OK' };
 				}
 			} catch (err) {
