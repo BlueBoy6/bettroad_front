@@ -106,11 +106,9 @@ export default {
 						});
 						return acc;
 					}, labelsPrepareCounter);
-					// console.log('counterGoodResults', counterGoodResults);
 
 					// lets calculate the cashprice
 					if (ownResult) {
-						// console.group('game');
 						cashPrizeForThisgame = ownResult.betsSubmited_TEST.reduce(
 							(acc, curr) => {
 								if (curr.win) {
@@ -162,7 +160,6 @@ export default {
 				total: totalCashPricer.toFixed(2),
 				games: globalcashPriceRegister,
 			};
-			console.log('personnalPrizePool', personnalPrizePool);
 			commit('storePrizePoolTotal', personnalPrizePool.total);
 			commit('storePrizePoolGames', personnalPrizePool.games);
 			return { status: 'OK' };

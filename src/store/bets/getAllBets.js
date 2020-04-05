@@ -4,7 +4,6 @@ import { getBets } from '../../helpers/betsdata';
 export const getAllBets = async function ({ commit, rootState }) {
 	const allBets = await getBets(rootState.user.token, rootState.user.id);
 
-	console.log('ça repasse pas par ici ?');
 	// init next game
 	let nextGameBet;
 
@@ -22,9 +21,7 @@ export const getAllBets = async function ({ commit, rootState }) {
 	// rebuilder function to inject results
 	const pastGamesWithBets = pastGames.map((game) => {
 		// Match the bet who got the gameday id
-		const betMatchedWithGame = allbetsWithoutNextGame.filter(
-			(bet) => bet.gameday.id === game.id
-		);
+		const betMatchedWithGame = allbetsWithoutNextGame.filter((bet) => bet.gameday.id === game.id);
 
 		// If we found a bet
 		if (betMatchedWithGame.length > 0) {
@@ -33,22 +30,17 @@ export const getAllBets = async function ({ commit, rootState }) {
 					if (typeof bet.result === 'object') {
 						return {
 							...bet,
-							success:
-								bet.result.name ===
-								betMatchedWithGame[0].betsSubmited_TEST[i].result.name,
+							success: bet.result.name === betMatchedWithGame[0].betsSubmited_TEST[i].result.name,
 							betsubmited: {
 								label: betMatchedWithGame[0].betsSubmited_TEST[i].label,
-								result:
-									betMatchedWithGame[0].betsSubmited_TEST[i].result,
+								result: betMatchedWithGame[0].betsSubmited_TEST[i].result,
 							},
 						};
 					}
 				}
 				return {
 					...bet,
-					success:
-						bet.result ===
-						betMatchedWithGame[0].betsSubmited_TEST[i].result,
+					success: bet.result === betMatchedWithGame[0].betsSubmited_TEST[i].result,
 					betsubmited: {
 						label: betMatchedWithGame[0].betsSubmited_TEST[i].label,
 						result: betMatchedWithGame[0].betsSubmited_TEST[i].result,
@@ -65,8 +57,7 @@ export const getAllBets = async function ({ commit, rootState }) {
 			for (let i = 0; i < gameRebuilt.betslist.length; i++) {
 				gameRebuilt.betslist[i].success && successNbr++;
 			}
-			const successPercent =
-				(successNbr / gameRebuilt.betslist.length) * 100;
+			const successPercent = (successNbr / gameRebuilt.betslist.length) * 100;
 			const stats = {
 				successPercent: successPercent,
 				numberOfSuccess: successNbr,

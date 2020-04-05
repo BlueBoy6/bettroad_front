@@ -137,7 +137,6 @@ export default {
 			}
 			if (this._games.gamesLoaded) {
 				this.dataLoaded = true;
-				console.log('this store :', this.$store.state);
 			}
 		},
 	},

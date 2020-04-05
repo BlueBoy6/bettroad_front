@@ -6,7 +6,6 @@ export default {
 	state: { list: null },
 	mutations: {
 		storeAllBets(state, payload) {
-			console.log('all bets paload !', payload);
 			state.list = payload;
 		},
 		storeFindedSubmitedNextGame(state, payload) {
@@ -17,9 +16,7 @@ export default {
 		},
 		storeBets(state, payload) {
 			const nextGameId = state.gamedays.nextGame.id;
-			const betOfNextGame = payload.filter(
-				(bet) => bet.gameday.id === nextGameId
-			);
+			const betOfNextGame = payload.filter((bet) => bet.gameday.id === nextGameId);
 			const nextGameBetSubmited = betOfNextGame.map((bet) => {
 				return { betType: bet.betstype.name, betSubmited: bet.betSubmited };
 			});
