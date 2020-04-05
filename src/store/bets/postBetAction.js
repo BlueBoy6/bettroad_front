@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { postBet } from '../../helpers/betsdata';
-export const postBets = async function({ commit, rootState }, payload) {
+export const postBets = async function ({ commit, rootState }, payload) {
 	const dataBets = payload.bets;
 	const gamedayDate = payload.gamedayId;
 
@@ -8,11 +8,11 @@ export const postBets = async function({ commit, rootState }, payload) {
 		user: rootState.user.id,
 		userName: rootState.user.name,
 		gameday: gamedayDate,
-		betsSubmited_TEST: dataBets.map(v => {
+		betsSubmited_TEST: dataBets.map((v) => {
 			// check if is Object
-			const betssubmit = Array.isArray(v.value) ? v.value[0] : v.value;
+			const betssubmit = Array.isArray(v.value) ? v.value : v.value;
 			return { __component: v.type, result: betssubmit, label: v.label };
-		})
+		}),
 	};
 
 	try {
@@ -25,10 +25,10 @@ export const postBets = async function({ commit, rootState }, payload) {
 					...bet,
 					betsubmited: {
 						label: nextGameBetSubmited[i].label,
-						result: nextGameBetSubmited[i].result
-					}
+						result: nextGameBetSubmited[i].result,
+					},
 				};
-			})
+			}),
 		};
 		commit('storeNextGame', rebuiltNextGame);
 		return rebuiltNextGame;
