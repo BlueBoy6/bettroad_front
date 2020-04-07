@@ -7,35 +7,18 @@
 				<img :src="require('./assets/favicon.jpg')" alt="road" />
 			</v-avatar>
 		</v-toolbar>
-
-		<v-navigation-drawer
-			v-if="userConnected"
-			v-model="openMenu"
-			absolute
-			temporary
-			justify="center"
-		>
-			<v-row class="mx-0">
-				<v-col class="px-10">
-					<p class="mb-0 subtitle-1">
-						{{ this.$store.state.user.team.name }}
-					</p>
-					<p class="mb-5 headline">
-						<b>{{ this.$store.state.user.name.toUpperCase() }}</b>
-					</p>
-					<v-btn width="100%" :class="colorInputs" @click="disconnect"
-						>Deconnexion</v-btn
-					>
-				</v-col>
-			</v-row>
-		</v-navigation-drawer>
+		<Menu v-if="userConnected" v-model="openMenu" />
 		<router-view></router-view>
 	</v-app>
 </template>
 
 <script>
 import { colorInputs } from '../src/style/colors.vars';
+import Menu from '@/components/organisms/Menu'
 export default {
+	components: {
+		Menu,
+	},
 	data() {
 		return {
 			colorInputs,

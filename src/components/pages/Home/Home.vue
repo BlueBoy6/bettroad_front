@@ -91,9 +91,11 @@ export default {
 			});
 		}
 		this.initApp();
+		console.log('user:', this._user)
 	},
 	computed: {
 		...mapState({
+			_user: state => state.user,
 			_games: (state) => state.gamedays,
 			_nextgame: (state) => state.gamedays.nextGame,
 			_pastgames: (state) => state.gamedays.pastGames,
