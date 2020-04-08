@@ -1,19 +1,27 @@
 <template>
 	<v-navigation-drawer
 		v-model="openMenu"
-		absolute
+		fixed
 		temporary
 		justify="center"
 	>
 		<v-row class="mx-0">
 			<v-col class="px-10">
-				<p class="mb-0 subtitle-1">
-					{{ this.$store.state.user.team.name }}
+                <p class="mb-0 body-2">
+                    {{_user.role}}
+                </p>
+				<p class="mb-0 subtitle-1 team-label">
+					{{ _user.team.name }}
 				</p>
 				<p class="mb-5 headline">
-					<b>{{ this.$store.state.user.name.toUpperCase() }}</b>
+					<b>{{ _user.name.toUpperCase() }}</b>
 				</p>
-				<v-btn width="100%" :class="colorInputs" @click="disconnect">
+                
+                <v-btn to="/moderator-space" :class="colorBtn" v-if="_user.role === 'Moderator'" block>
+					Espace de modération
+				</v-btn>
+                <v-divider class="my-5" />
+				<v-btn width="100%" :class="colorBtn" @click="disconnect">
 					Deconnexion
 				</v-btn>
 			</v-col>
@@ -22,6 +30,7 @@
 </template>
 
 <script>
+import { colorBtn } from '@/style/colors.vars';
 import { mapState } from 'vuex';
 	export default {
         props: {
@@ -30,9 +39,14 @@ import { mapState } from 'vuex';
                 default: false
             },
         },
+        data() {
+            return {
+                colorBtn
+            }
+        },
         computed: {
             ...mapState({
-                
+                _user: state => state.user
             }),
             openMenu: {
                 get(){
@@ -59,4 +73,8 @@ import { mapState } from 'vuex';
     };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.team-label{
+    color: #9FA8DA;
+}
+</style>

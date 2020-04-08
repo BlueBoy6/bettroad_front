@@ -32,8 +32,8 @@
 				</p>
 			</div>
 			<v-btn class="mt-6" large to="/nextgame-modifier">
-				<v-icon small dark class="mr-2">mdi-pencil</v-icon> Modifier mon
-				pari
+				<v-icon dark class="mr-2">mdi-pencil</v-icon> 
+				Modifier mon pari
 			</v-btn>
 		</v-col>
 	</v-row>

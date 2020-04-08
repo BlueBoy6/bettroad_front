@@ -1,27 +1,26 @@
 <template>
 	<v-app class="page__view">
-		<v-toolbar class="top__menu" v-if="userConnected">
+		<v-app-bar class="top__menu" v-if="userConnected" fixed>
 			<v-app-bar-nav-icon @click="openMenuAction"></v-app-bar-nav-icon>
 			<v-spacer></v-spacer>
 			<v-avatar size="40">
 				<img :src="require('./assets/favicon.jpg')" alt="road" />
 			</v-avatar>
-		</v-toolbar>
+		</v-app-bar>
 		<Menu v-if="userConnected" v-model="openMenu" />
 		<router-view></router-view>
 	</v-app>
 </template>
 
 <script>
-import { colorInputs } from '../src/style/colors.vars';
 import Menu from '@/components/organisms/Menu'
+import '@/style/main.scss'
 export default {
 	components: {
 		Menu,
 	},
 	data() {
 		return {
-			colorInputs,
 			openMenu: false,
 		};
 	},

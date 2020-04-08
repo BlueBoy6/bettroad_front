@@ -25,6 +25,7 @@ export const loginConnect = (login, password) => {
 				localStorage.userToken = token.user.token;
 				localStorage.userId = token.user.id;
 				localStorage.userName = token.user.name;
+				localStorage.userRole = token.user.role;
 				localStorage.userTeam = token.user.team.name;
 				return token;
 			}

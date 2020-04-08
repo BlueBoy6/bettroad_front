@@ -1,5 +1,5 @@
 <template>
-	<v-container v-if="dataLoaded" class="dashboard">
+	<v-container v-if="dataLoaded" class="dashboard mt-12">
 		<v-row justify="center">
 			<v-col cols="12" md="8">
 				<NextGame v-if="_nextgame" :game="_nextgame" />

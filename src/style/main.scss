@@ -1,0 +1,21 @@
+#app{
+  .v-btn{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    height: auto;
+    &.v-size--x-large{
+      padding-top: 18px;
+      padding-bottom: 18px;
+    }
+    &.v-size--small{
+      padding-top: 0px;
+      padding-bottom: 0px;
+    }
+    .v-btn__content{
+      max-width: 100%;
+      word-wrap: break-word;
+      white-space: normal;
+      text-align: center;
+    }
+  }
+}

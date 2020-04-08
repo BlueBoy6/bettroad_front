@@ -5,7 +5,7 @@ export default {
 	state: {
 		id: localStorage.userId ? localStorage.userId : null,
 		name: localStorage.userName || null,
-		role: null,
+		role: localStorage.userRole || null,
 		token: localStorage.userToken || null,
 		team: { name: localStorage.userTeam },
 		email: null,
