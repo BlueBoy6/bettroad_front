@@ -9,6 +9,7 @@
         </v-row>
         <v-row class="mb-10">
           <v-btn to="/dashboard" :class="colorBtn">
+          <v-icon small dark class="mr-2"> mdi-hockey-sticks </v-icon>
             Retour à l'espace de paris
           </v-btn>
         </v-row>
@@ -23,7 +24,11 @@
               <v-icon small dark class="mr-2">mdi-calendar-plus</v-icon> Créer une nouvelle journée
             </v-btn>
           </v-row>
-          <v-row :key="game.id" v-for="game in _games.allGames">
+          <ModeNextGames :games="_games" />
+          <h2 class="headline mb-3">
+            Matchs passés non modifiables
+          </h2>
+          <v-row :key="game.id" v-for="game in _games.pastGames">
             <v-sheet class="game__vignet" :class="[spaceInside, colorBackgroundLight, darkText, 'mb-3']">
               <p class="subtitle-1 mb-0">
                 <span>{{ game.city }}</span> -
@@ -31,18 +36,11 @@
               </p>
               <p class="headline font-weight-bold mb-1">{{ game.day.fr }}</p>
               <div class="game__vignet__betslist__container">
-              <v-sheets :key="bet.id" v-for="bet in game.betslist" >
-                <v-row>
-                  <div class="chips mb-2">
+                <div class="game__vignet__betslist__list" >
+                  <div class="game__vignet__betslist__list__item" :key="bet.id" v-for="bet in game.betslist">
                     {{bet.label}}
-                    <v-btn to="/dashboard" round small>
-                      <v-icon x-small dark>mdi-lead-pencil</v-icon>
-                    </v-btn>
                   </div>
-
-                </v-row>
-              </v-sheets>
-
+                </div>
               </div>
             </v-sheet>
           </v-row>
@@ -61,6 +59,7 @@
 
 <script>
 /* eslint-disable no-console */
+import ModeNextGames from './ModeNextGames'
 import { mapState } from 'vuex';
 import {
   colorBtn,
@@ -68,7 +67,11 @@ import {
   colorBackgroundLight, 
   darkText
 } from '@/style/colors.vars';
+
   export default {
+    components: {
+      ModeNextGames,
+    },
     data() {
       return {
         colorBtn,
@@ -143,7 +146,7 @@ import {
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .moderator-space{
   .page-title{
     width: 100%;
@@ -151,19 +154,46 @@ import {
   }
   .game__vignet{
     width: 100%;
-    &__betslist__container{
-      .chips{
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-        background: #3949AB;
-        color: #ffffff;
+    &__betslist{
+      &__container{
+        .chips{
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+          background: #3949AB;
+          color: #ffffff;
+          border-radius: 4px;
+          padding: 7px 15px;
+          padding-right: 7px;
+          box-shadow: 0px 3px 4px 0px rgba(0,0,0,0.25);
+          .v-btn{
+            min-height: 25px;;
+            margin-left: 10px;
+            background: #1A237E;
+          }
+        }
+      }
+      &__list{
+        background: #C5CAE9;
         border-radius: 4px;
-        padding: 5px 15px;
-        box-shadow: 0px 3px 4px 0px rgba(0,0,0,0.25);
-        .v-btn{
-          margin-left: 10px;
-          background: #283593;
+        &__item{
+          position: relative;
+          z-index: 1;
+          padding: 5px 15px;
+          
+          &:before{
+            content: '';
+            position: absolute;
+            z-index: 9;
+            top: 100%;
+            height: 1px ;
+            width: calc(100% - 30px);
+            background: rgba(0,0,0,0.25);
+            left: 15px;
+          }
+          &:last-child::before{
+            display: none;
+          }
         }
       }
     }

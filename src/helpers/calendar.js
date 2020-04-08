@@ -28,3 +28,10 @@ export const dateFormater = date => {
 	const frdate = moment(date).format('LL');
 	return { en: endate, fr: frdate };
 };
+
+export const getSeason = date => {
+	const monthNumber = Number(moment(date).format('MM'));
+	const year = moment(date).year()
+	const season = monthNumber < 7 ? [year - 1, year] : [year, year + 1];
+	return season;
+}

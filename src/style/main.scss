@@ -3,6 +3,9 @@
     padding-top: 10px;
     padding-bottom: 10px;
     height: auto;
+    &.danger{
+      background-color: #D84315;
+    }
     &.v-size--x-large{
       padding-top: 18px;
       padding-bottom: 18px;

@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { getGamedays as getCalendar } from '../../helpers/calendar';
-import { dateFormater } from '../../helpers/calendar';
+import { dateFormater, getSeason } from '../../helpers/calendar';
 import moment from 'moment';
 import momentfr from '../../helpers/momentfr';
 
@@ -11,6 +11,7 @@ export default {
 		futureGames: null,
 		pastGames: null,
 		allGames: null,
+		seasons: null
 	},
 	mutations: {
 		storeAllGames(state, payload) {
@@ -19,6 +20,7 @@ export default {
 			state.nextGame = payload.nextgame;
 			state.futureGames = payload.futuregames;
 			state.gamesLoaded = payload.gamesloaded;
+			state.seasons = payload.seasons;
 		},
 		storeNextGame(state, payload) {
 			state.nextGame = payload;
@@ -55,6 +57,7 @@ export default {
 								day: {
 									...dateFormater(date.day),
 									dayNumber: games.length - i,
+									season: getSeason(date.day)
 								},
 							};
 						});
@@ -66,14 +69,28 @@ export default {
 					const futureGames = gamesSortedFormated.filter((date) => {
 						return moment(date.day.en).isAfter(Date.now()) && date;
 					});
+
+					const fut = futureGames;
+					console.log('future games :', fut)
+
+					const seasonsTab = gamesSortedFormated.reduce((acc, curr) => {
+						const season = curr.day.season.join('')
+						const seasons = acc.map(seasonYear => seasonYear.join(''))
+						if(!seasons.includes(season)){
+							acc.push(curr.day.season)
+						}
+						return acc;
+					},[])
+
 					const storeGames = {
 						gamesloaded: true,
 						nextgame: futureGames[0] || [],
-						futuregames: futureGames.splice(1, futureGames.length) || [],
+						futuregames: futureGames || [],
 						pastgames: pastGames,
 						allgames: gamesSortedFormated,
+						seasons: seasonsTab
 					};
-
+					
 					commit('storeAllGames', storeGames);
 					return { statusText: 'OK' };
 				}
