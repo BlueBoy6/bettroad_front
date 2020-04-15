@@ -24,26 +24,8 @@
               <v-icon small dark class="mr-2">mdi-calendar-plus</v-icon> Créer une nouvelle journée
             </v-btn>
           </v-row>
-          <ModeNextGames :games="_games" />
-          <h2 class="headline mb-3">
-            Matchs passés non modifiables
-          </h2>
-          <v-row :key="game.id" v-for="game in _games.pastGames">
-            <v-sheet class="game__vignet" :class="[spaceInside, colorBackgroundLight, darkText, 'mb-3']">
-              <p class="subtitle-1 mb-0">
-                <span>{{ game.city }}</span> -
-                <span>Journée {{ game.day.dayNumber }}</span>
-              </p>
-              <p class="headline font-weight-bold mb-1">{{ game.day.fr }}</p>
-              <div class="game__vignet__betslist__container">
-                <div class="game__vignet__betslist__list" >
-                  <div class="game__vignet__betslist__list__item" :key="bet.id" v-for="bet in game.betslist">
-                    {{bet.label}}
-                  </div>
-                </div>
-              </div>
-            </v-sheet>
-          </v-row>
+          <ModeFutureGames :games="_games" />
+          <ModePastGames :pastGames="_games.pastGames" />
         </template>
         <v-progress-circular
 					:size="130"
@@ -59,8 +41,9 @@
 
 <script>
 /* eslint-disable no-console */
-import ModeNextGames from './ModeNextGames'
-import { mapState } from 'vuex';
+import ModeFutureGames from './ModeFutureGames'
+import ModePastGames from './ModePastGames'
+import { mapState, mapActions } from 'vuex';
 import {
   colorBtn,
   spaceInside, 
@@ -70,7 +53,8 @@ import {
 
   export default {
     components: {
-      ModeNextGames,
+      ModeFutureGames,
+      ModePastGames
     },
     data() {
       return {
@@ -89,8 +73,6 @@ import {
       })
     },
     mounted () {
-      console.log("loaded :", this.dataLoaded)
-      console.log("loaded :", this.dataLoaded)
       this.initApp();
       
       if(this.dataLoaded && this._user.role !== 'Moderator') {
@@ -99,10 +81,8 @@ import {
         });
       }
     },
-    updated () {
-      console.log('this._games', this._games);
-    },
     methods: {
+      ...mapActions(["getCategoriesOfBets"]),
       initApp: async function () {
         if (this._games.gamesLoaded === false) {
           try {
@@ -135,10 +115,14 @@ import {
             };
             throw `Petit problème dans la récupération des teammates`;
           }
+          try {
+            await this.$store.dispatch('getCategoriesOfBets');
+          } catch (error) {
+            throw `une erreure est arrivé dans la récupération des catégories ${error}`
+          }
           this.dataLoaded = true;
         }
-        if (this._games.gamesLoaded) {
-          console.log('return loaded ?')
+        if (this._games.gamesLoaded) {  
           this.dataLoaded = true;
         }
       },

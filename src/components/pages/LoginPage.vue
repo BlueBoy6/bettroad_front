@@ -12,7 +12,7 @@
 					:color="colorInputs"
 					label="Ton pseudo"
 					outlined
-				></v-text-field>
+				/>
 				<v-text-field
 					:type="showMdp ? 'text' : 'password'"
 					@input="val => (password = val)"
@@ -22,15 +22,16 @@
 					@click:append="showMdp = !showMdp"
 					@keydown="keyDownSwitcher"
 					outlined
-				></v-text-field>
+				/>
 				<v-alert
 					v-model="error.status"
 					close-text="Close Alert"
 					:class="colorErrorModal"
 					dark
 					dismissible
-					>{{ error.message }}</v-alert
-				>
+					>
+					{{ error.message }}
+					</v-alert>
 				<v-row justify="end">
 					<v-col cols="auto" class="py-0">
 						<v-btn

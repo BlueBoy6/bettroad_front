@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import axios from "axios";
 import { back } from "./constants";
+import categorieSwitcher from './betCategoriesSwitcher';
 
 const backurl = back.url;
 
@@ -90,6 +91,7 @@ export const postBet = async (token, datas) => {
 		console.log("error  :", err);
 	}
 };
+
 export const updateBet = async (token, datas, idBet) => {
 	try {
 		const betcall = await axios({
@@ -111,3 +113,26 @@ export const updateBet = async (token, datas, idBet) => {
 		console.log("error  :", err);
 	}
 };
+
+export const getCategoriesAvailable = async (token) => {
+	try {
+		const componentsFetch = await axios({
+			method: "get",
+			url: `${backurl}/content-type-builder/components`,
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
+		});
+
+		const betsCategories = componentsFetch.data.data.map(comp => {
+			return {
+				name: categorieSwitcher(comp.schema.name), 
+				uid: comp.uid
+			};
+		});
+		return betsCategories;
+	}
+	catch(err){
+		throw `Une erreur est arrivé lors de la récupération des types de paris disponnible : ${err}`
+	}
+}

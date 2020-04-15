@@ -1,9 +1,9 @@
 <template>
-  <div class="futureGames__container mb-5">
+  <div>
     <h2 class="headline mb-3">
-      Prochains matchs
+      Matchs passés non modifiables
     </h2>
-    <v-row :key="game.id" v-for="game in games.futureGames">
+    <v-row :key="game.id" v-for="game in pastGames">
       <v-sheet class="game__vignet" :class="[spaceInside, colorBackgroundLight, darkText, 'mb-3']">
         <p class="subtitle-1 mb-0">
           <span>{{ game.city }}</span> -
@@ -11,20 +11,10 @@
         </p>
         <p class="headline font-weight-bold mb-1">{{ game.day.fr }}</p>
         <div class="game__vignet__betslist__container">
-          <div :key="bet.id" v-for="bet in game.betslist" >
-            <v-row>
-              <div class="chips mb-2">
-                {{bet.label}}
-                <div class="bets__modifier">
-                  <v-btn to="/dashboard" small class="danger">
-                    <v-icon x-small dark>mdi-delete</v-icon>
-                  </v-btn>
-                  <v-btn to="/dashboard" small>
-                    <v-icon x-small dark>mdi-lead-pencil</v-icon>
-                  </v-btn>
-                </div>
-              </div>
-            </v-row>
+          <div class="game__vignet__betslist__list" >
+            <div v-for="bet in game.betslist" :key="bet.id" class="game__vignet__betslist__list__item" >
+              {{bet.label}}
+            </div>
           </div>
         </div>
       </v-sheet>
@@ -41,7 +31,7 @@ import {
 } from '@/style/colors.vars';
   export default {
     props: {
-      games: {
+      pastGames: {
         type: Array,
         required: true
       }
@@ -51,7 +41,7 @@ import {
         colorBtn,
         spaceInside, 
         colorBackgroundLight, 
-        darkText
+        darkText,
       }
     },
   }
