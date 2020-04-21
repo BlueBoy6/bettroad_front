@@ -24,7 +24,7 @@
               <v-icon small dark class="mr-2">mdi-calendar-plus</v-icon> Créer une nouvelle journée
             </v-btn>
           </v-row>
-          <ModeFutureGames :games="_games" />
+          <ModeFutureGames :futureGames="_games.futureGames" />
           <ModePastGames :pastGames="_games.pastGames" />
         </template>
         <v-progress-circular

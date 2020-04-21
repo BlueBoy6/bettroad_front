@@ -3,7 +3,7 @@
     <h2 class="headline mb-3">
       Prochains matchs
     </h2>
-    <v-row :key="game.id" v-for="game in games.futureGames">
+    <v-row :key="game.id" v-for="game in futureGames">
       <v-sheet class="game__vignet" :class="[spaceInside, colorBackgroundLight, darkText, 'mb-3']">
         <p class="subtitle-1 mb-0">
           <span>{{ game.city }}</span> -
@@ -13,7 +13,7 @@
         <div class="game__vignet__betslist__container">
           <div :key="bet.id" v-for="bet in game.betslist" >
             <div class="chips mb-2">
-              {{bet.label}}
+              {{ bet.label }} - {{ categorieSwitch(bet.__component) }}
               <div class="bets__modifier">
                 <v-btn to="/dashboard" small class="danger">
                   <v-icon x-small dark>mdi-delete</v-icon>
@@ -61,10 +61,11 @@ import {
   colorBackgroundLight, 
   darkText
 } from '@/style/colors.vars';
+import categorieSwitcher from '@/helpers/betCategoriesSwitcher';
 import { mapState } from 'vuex';
   export default {
     props: {
-      games: {
+      futureGames: {
         type: Array,
         required: true
       }
@@ -86,6 +87,10 @@ import { mapState } from 'vuex';
     methods: {
       addBett() {
         return this.newBets.push({ value: '', category: 0 });
+      },
+      categorieSwitch(switchValue){
+        console.log('switchValue :', categorieSwitcher(switchValue));
+        return categorieSwitcher(switchValue)
       }
     },
   }

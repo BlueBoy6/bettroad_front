@@ -126,7 +126,7 @@ export const getCategoriesAvailable = async (token) => {
 
 		const betsCategories = componentsFetch.data.data.map(comp => {
 			return {
-				name: categorieSwitcher(comp.schema.name), 
+				name: categorieSwitcher(comp.uid), 
 				uid: comp.uid
 			};
 		});

@@ -1,9 +1,9 @@
-export default function (label){
+export default function categorieSwitcher(label){
   switch(label){
-    case 'Numberchoice': return 'Nombre'
-    case 'PlayerChoice': return 'Joueurs'
-    case 'TeamChoice': return 'Equipes'
-    case 'TimeChoice': return 'Temps'
-    case 'YesNoChoice': return 'Oui/Non'
+    case "betcategories.number-choice": return "Nombre"
+    case "betcategories.player-choice": return "Joueurs"
+    case "betcategories.team-choice": return "Equipes"
+    case "betcategories.time-choice": return "Temps"
+    case "betcategories.yes-no-choice": return "Oui/Non"
   }
 }

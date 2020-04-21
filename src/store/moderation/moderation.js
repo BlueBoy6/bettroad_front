@@ -8,7 +8,6 @@ export default {
   mutations:{
     storeCategories(state, payload){
       state.betsCategories = payload;
-      console.log('state.betsCategories', state.betsCategories);
     }
   },
   actions:{
