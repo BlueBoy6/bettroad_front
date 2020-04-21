@@ -91,7 +91,6 @@ export default {
 			});
 		}
 		this.initApp();
-		console.log('user:', this._user)
 	},
 	computed: {
 		...mapState({
@@ -134,6 +133,11 @@ export default {
 							"Hey ! il y a un petit problème de démarage, de l'application, l'équipe bosse certainement déjà dessus ! 🏒",
 					};
 					throw `Petit problème dans la récupération des teammates`;
+				}
+				try {
+					await this.$store.dispatch('getCategoriesOfBets');
+				} catch (error) {
+					throw `une erreure est arrivé dans la récupération des catégories ${error}`
 				}
 				this.dataLoaded = true;
 			}

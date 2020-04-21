@@ -123,6 +123,8 @@ export default {
 			this.betsController = controllerRebuilt;
 		},
 		submitModification: function () {
+			console.log('this.bets : ', this.bets)
+			console.log('this.nextgame : ', this.nextgame)
 			const betId = this.bets.find(
 				(bet) => bet.gameday.id === this.nextgame.id
 			).id;

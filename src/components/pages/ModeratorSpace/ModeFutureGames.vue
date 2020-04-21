@@ -24,29 +24,32 @@
               </div>
             </div>
           </div>
-          <div class="bett__add mt-5">
-            <div v-for="(newBet, i) in newBets"
-                :key="i" >
-              <v-btn-toggle
-                v-model="newBets[i].category"
-                class="mb-2"
-                mandatory
-              >
-                <v-btn :key="option.uid" v-for="option in _betsCategories" small>
-                  <v-icon></v-icon> {{ option.name }} 
-                </v-btn>
-              </v-btn-toggle>
-              <v-text-field
-                label="Ajouter un paris" 
-                :append-icon="i === newBets.length -1 && 'mdi-plus'"
-                @click:append="addBett"
-                v-model="newBets[i].value"
-                light
-                outlined 
-                dense
-                />
+          <template v-if="_betsCategories">
+            <div class="bett__add mt-5">
+              <div v-for="(newBet, i) in newBets"
+                  :key="i"
+                  >
+                <v-btn-toggle
+                  v-model="newBets[i].category"
+                  class="mb-2"
+                  mandatory
+                >
+                  <v-btn :key="option.uid" v-for="option in _betsCategories" small>
+                    <v-icon></v-icon> {{ option.name }} 
+                  </v-btn>
+                </v-btn-toggle>
+                <v-text-field
+                  label="Ajouter un titre de paris" 
+                  :append-icon="i === newBets.length -1 ? 'mdi-plus' : ''"
+                  @click:append="addBett"
+                  v-model="newBets[i].value"
+                  light
+                  outlined 
+                  dense
+                  />
+              </div>
             </div>
-          </div>
+          </template>
         </div>
       </v-sheet>
     </v-row>

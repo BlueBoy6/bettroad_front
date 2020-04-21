@@ -70,9 +70,6 @@ export default {
 						return moment(date.day.en).isAfter(Date.now()) && date;
 					});
 
-					const fut = futureGames;
-					console.log('future games :', fut)
-
 					const seasonsTab = gamesSortedFormated.reduce((acc, curr) => {
 						const season = curr.day.season.join('')
 						const seasons = acc.map(seasonYear => seasonYear.join(''))

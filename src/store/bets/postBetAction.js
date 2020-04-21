@@ -17,6 +17,7 @@ export const postBets = async function ({ commit, rootState }, payload) {
 
 	try {
 		const postAction = await postBet(rootState.user.token, postFormat);
+		console.log('post bet : ', postAction.data);
 		const nextGameBetSubmited = postAction.data.betsSubmited_TEST;
 		const rebuiltNextGame = {
 			...rootState.gamedays.nextGame,
@@ -30,6 +31,7 @@ export const postBets = async function ({ commit, rootState }, payload) {
 				};
 			}),
 		};
+		commit('storeBet', postAction.data)
 		commit('storeNextGame', rebuiltNextGame);
 		return rebuiltNextGame;
 	} catch (err) {

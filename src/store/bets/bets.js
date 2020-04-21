@@ -25,6 +25,9 @@ export default {
 			}
 			return (state.bets.nextGame = nextGameBetSubmited);
 		},
+		storeBet(state, payload) {
+			return state.list = [...state.list, payload];
+		},
 		clearBets(state) {
 			state.list = null;
 		},
