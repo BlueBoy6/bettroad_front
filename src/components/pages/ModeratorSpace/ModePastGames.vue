@@ -12,7 +12,7 @@
         <p class="headline font-weight-bold mb-1">{{ game.day.fr }}</p>
         <div class="game__vignet__betslist__container">
           <div class="game__vignet__betslist__list" >
-            <div v-for="bet in game.betslist" :key="bet.id" class="game__vignet__betslist__list__item" >
+            <div v-for="(bet, j) in game.betslist"  :key="j" class="game__vignet__betslist__list__item" >
               {{bet.label}}
             </div>
           </div>

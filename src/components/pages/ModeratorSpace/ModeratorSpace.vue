@@ -41,7 +41,7 @@
 
 <script>
 /* eslint-disable no-console */
-import ModeFutureGames from './ModeFutureGames'
+import ModeFutureGames from './ModeFutureGames/ModeFutureGames'
 import ModePastGames from './ModePastGames'
 import { mapState, mapActions } from 'vuex';
 import {

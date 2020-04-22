@@ -35,3 +35,7 @@ export const getSeason = date => {
 	const season = monthNumber < 7 ? [year - 1, year] : [year, year + 1];
 	return season;
 }
+
+export const fullFormatterDate = date => {
+	return date
+};

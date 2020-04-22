@@ -68,7 +68,7 @@ export default {
 
 					const futureGames = gamesSortedFormated.filter((date) => {
 						return moment(date.day.en).isAfter(Date.now()) && date;
-					});
+					}).reverse();
 
 					const seasonsTab = gamesSortedFormated.reduce((acc, curr) => {
 						const season = curr.day.season.join('')
