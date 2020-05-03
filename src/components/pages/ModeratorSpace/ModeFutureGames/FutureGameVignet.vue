@@ -7,42 +7,16 @@
     <!-- <p class="headline font-weight-bold" @click="dateToggle" :class="{'mb-5': !isNextGame, 'mb-0': isNextGame}">{{ game.day.fr }}</p> -->
     <p class="subtitle-1 mb-5 teal--text text--darken-1" v-if="isNextGame">Prochaine journée de paris</p>
     <div class="game__vignet__betslist__container">
-      <div :key="bet.id" v-for="bet in game.betslist" >
-        <div class="chips mb-2">
-          {{ bet.label }} - {{ categorieSwitch(bet.__component) }}
-          <div class="bets__modifier">
-            <v-btn to="/dashboard" small class="danger">
-              <v-icon x-small dark>mdi-delete</v-icon>
-            </v-btn>
-            <v-btn to="/dashboard" small>
-              <v-icon x-small dark>mdi-lead-pencil</v-icon>
-            </v-btn>
-          </div>
-        </div>
-      </div>
       <div class="bett__add mt-5">
-        <div v-for="(newBet, i) in newBets"
-            :key="i"
-            >
-          <v-btn-toggle
-            v-model="newBets[i].category"
-            class="mb-2"
-            mandatory
-          >
-            <v-btn :key="option.uid" v-for="option in _betsCategories" small>
-              <v-icon></v-icon> {{ option.name }} 
-            </v-btn>
-          </v-btn-toggle>
-          <v-text-field
-            label="Ajouter un titre de paris" 
-            :append-icon="i === newBets.length -1 ? 'mdi-plus' : ''"
-            @click:append="addBett"
-            v-model="newBets[i].value"
-            light
-            outlined 
-            dense
-            />
-        </div>
+        <BetModifier 
+          v-for="(bet, i) in betsList" 
+          :key="i" 
+          :bet="bet"
+          :createNewPicto="i === betsList.length-1"
+          @createNewBet="createNewBet"
+          :option="categorieSwitch(bet.__component)" 
+          :categories="_betsCategories"
+          @saveInput="saveBet" />
         <v-btn @click="() => saveModification">Sauvegarder</v-btn>
       </div>
     </div>
@@ -58,12 +32,14 @@ import {
   darkText,
   colorSuccess
 } from '@/style/colors.vars';
+import BetModifier from './betModifier.vue'
 import DatePicker from '@/components/molecules/DatePicker.vue';
 import { mapState } from 'vuex';
 import categorieSwitcher from '@/helpers/betCategoriesSwitcher';
   export default {
     components: {
       DatePicker,
+      BetModifier
     },
     props: {
       game: {
@@ -80,7 +56,7 @@ import categorieSwitcher from '@/helpers/betCategoriesSwitcher';
         colorSuccess,
         picker: this.game.day.en,
         dialog: false,
-        newBets: [{ value: '', category: 0 }],
+        betsList: this.game.betslist,
       }
     },
     computed: {
@@ -93,16 +69,24 @@ import categorieSwitcher from '@/helpers/betCategoriesSwitcher';
       }
     },
     methods: {
-      
       saveModification(){
         console.log('save', this.game.id)
       },
-      addBett() {
-        return this.newBets.push({ value: '', category: 0 });
+      createNewBet() {
+        console.log('create new bet in parent : ')
+        return this.betsList.push({id: Date.now(), result: null, value: '', category: this._betsCategories[0] });
       },
       categorieSwitch(switchValue){
         return categorieSwitcher(switchValue)
+      },
+      saveBet({id, betLabel, betsCategorie}){
+        console.log('id', id) 
+        console.log('betLabel', betLabel) 
+        console.log('betsCategorie', betsCategorie) 
       }
+    },
+    updated () {
+      console.log('betslist : ', this.betsList);
     },
   }
 </script>
